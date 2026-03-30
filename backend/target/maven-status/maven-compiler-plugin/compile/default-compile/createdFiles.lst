@@ -1,4 +1,5 @@
 com/mangala/showroom/payload/LoginRequest.class
+com/mangala/showroom/payload/GuestTrackResponse.class
 com/mangala/showroom/controller/AuthController.class
 com/mangala/showroom/controller/UserController.class
 com/mangala/showroom/model/User.class
@@ -8,6 +9,7 @@ com/mangala/showroom/security/AuthEntryPointJwt.class
 com/mangala/showroom/controller/ProductController.class
 com/mangala/showroom/controller/WishlistController.class
 com/mangala/showroom/security/SecurityConfig.class
+com/mangala/showroom/payload/GuestTrackRequest.class
 com/mangala/showroom/service/ProductService.class
 com/mangala/showroom/model/Order.class
 com/mangala/showroom/config/DataInitializer.class
@@ -16,6 +18,7 @@ com/mangala/showroom/payload/RegisterRequest.class
 com/mangala/showroom/service/OrderService.class
 com/mangala/showroom/controller/OrderController$1.class
 com/mangala/showroom/repository/OrderRepository.class
+com/mangala/showroom/payload/GuestTrackResponse$Milestone.class
 com/mangala/showroom/repository/ProductRepository.class
 com/mangala/showroom/model/Wishlist.class
 com/mangala/showroom/repository/WishlistRepository.class

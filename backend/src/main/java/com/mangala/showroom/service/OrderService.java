@@ -29,14 +29,15 @@ public class OrderService {
      * Process checkout: save slip file to disk, create Order with multiple items and shipping info.
      */
     public Order checkout(
-            MultipartFile slip, 
-            Map<Long, Integer> items, 
-            BigDecimal total, 
-            String customerName, 
+            MultipartFile slip,
+            Map<Long, Integer> items,
+            BigDecimal total,
+            String customerName,
             String phoneNumber,
             String address,
             String note,
-            Long userId
+            Long userId,
+            String guestEmail
     ) throws IOException {
         
         // Ensure upload directory exists
@@ -64,6 +65,7 @@ public class OrderService {
         order.setAddress(address);
         order.setNote(note);
         order.setUserId(userId);
+        order.setGuestEmail(guestEmail);
         order.setItems(items);
 
         return orderRepository.save(order);

@@ -26,6 +26,10 @@ export default function Navbar() {
             <Link to="/catalog?category=Electronics" className="text-zinc-600 hover:text-green-800 transition-colors py-1 font-bold">
               Electronics
             </Link>
+            <Link to="/track" className="text-zinc-600 hover:text-green-800 transition-colors py-1 font-bold flex items-center gap-1">
+              <span className="material-symbols-outlined text-base leading-none">package_2</span>
+              Track Order
+            </Link>
             {user && (
               <button onClick={() => navigate('/dashboard')} className="text-zinc-600 hover:text-green-800 transition-colors py-1 font-bold cursor-pointer">
                 My Profile

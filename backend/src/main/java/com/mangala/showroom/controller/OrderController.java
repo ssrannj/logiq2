@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mangala.showroom.model.Order;
 import com.mangala.showroom.model.OrderStatus;
+import com.mangala.showroom.payload.GuestTrackRequest;
+import com.mangala.showroom.payload.GuestTrackResponse;
+import com.mangala.showroom.repository.UserRepository;
 import com.mangala.showroom.security.UserDetailsImpl;
 import com.mangala.showroom.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +34,9 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     private Long getCurrentUserId() {
@@ -36,7 +45,15 @@ public class OrderController {
             UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
             return userDetails.getId();
         }
-        return null; // Guest or unauthenticated
+        return null;
+    }
+
+    private String getCurrentUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserDetailsImpl) {
+            return ((UserDetailsImpl) auth.getPrincipal()).getEmail();
+        }
+        return null;
     }
 
     /**
@@ -46,12 +63,13 @@ public class OrderController {
     @PostMapping("/checkout")
     public ResponseEntity<?> checkout(
             @RequestParam("slip") MultipartFile slip,
-            @RequestParam("items") String itemsJson, // JSON string like {"1": 2, "3": 1}
+            @RequestParam("items") String itemsJson,
             @RequestParam("total") BigDecimal total,
             @RequestParam("customerName") String customerName,
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("address") String address,
-            @RequestParam(value = "note", required = false) String note
+            @RequestParam(value = "note", required = false) String note,
+            @RequestParam(value = "guestEmail", required = false) String guestEmail
     ) {
         if (slip == null || slip.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Payment slip is required."));
@@ -60,23 +78,80 @@ public class OrderController {
         try {
             Map<Long, Integer> items = objectMapper.readValue(itemsJson, new TypeReference<Map<Long, Integer>>(){});
             Long userId = getCurrentUserId();
-            
+            String emailToStore = (userId == null) ? guestEmail : null;
+
             Order savedOrder = orderService.checkout(
-                    slip, 
-                    items, 
-                    total, 
-                    customerName, 
-                    phoneNumber, 
-                    address, 
-                    note, 
-                    userId
+                    slip, items, total, customerName, phoneNumber, address, note, userId, emailToStore
             );
-            
+
             return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Checkout failed: " + e.getMessage()));
         }
+    }
+
+    /**
+     * POST /api/orders/track-guest
+     * Verifies orderId + email and returns safe tracking data.
+     */
+    @PostMapping("/track-guest")
+    public ResponseEntity<?> trackGuest(@RequestBody GuestTrackRequest request) {
+        if (request.getOrderId() == null || request.getEmail() == null || request.getEmail().isBlank()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Order ID and email are required."));
+        }
+
+        Optional<Order> orderOpt = orderService.getOrder(request.getOrderId());
+        if (orderOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Order not found. Please check your order ID."));
+        }
+
+        Order order = orderOpt.get();
+        String providedEmail = request.getEmail().trim().toLowerCase();
+        boolean emailMatches = false;
+
+        if (order.getUserId() != null) {
+            // Authenticated user order — verify against user's account email
+            var userOpt = userRepository.findById(order.getUserId());
+            if (userOpt.isPresent() && userOpt.get().getEmail().equalsIgnoreCase(providedEmail)) {
+                emailMatches = true;
+            }
+        } else if (order.getGuestEmail() != null) {
+            // Guest order — verify against stored guest email
+            emailMatches = order.getGuestEmail().equalsIgnoreCase(providedEmail);
+        }
+
+        if (!emailMatches) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Email does not match the order. Please check your details."));
+        }
+
+        // Build safe milestones (no private/admin data)
+        List<String> statusKeys = Arrays.asList("VERIFYING", "PACKED", "IN_TRANSIT", "DELIVERED");
+        List<String> statusLabels = Arrays.asList("Payment Verifying", "Packed & Ready", "In Transit", "Delivered");
+        int currentIndex = statusKeys.indexOf(order.getStatus().name());
+
+        List<GuestTrackResponse.Milestone> milestones = new ArrayList<>();
+        for (int i = 0; i < statusKeys.size(); i++) {
+            milestones.add(new GuestTrackResponse.Milestone(
+                    statusKeys.get(i),
+                    statusLabels.get(i),
+                    i <= currentIndex
+            ));
+        }
+
+        GuestTrackResponse response = new GuestTrackResponse(
+                order.getId(),
+                order.getStatus().name(),
+                order.getCustomerName(),
+                order.getAddress(),
+                order.getTotal(),
+                order.getCreatedAt(),
+                milestones
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/my-orders")
@@ -85,8 +160,7 @@ public class OrderController {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Unauthorized"));
         }
-        List<Order> orders = orderService.getOrdersByUser(userId);
-        return ResponseEntity.ok(orders);
+        return ResponseEntity.ok(orderService.getOrdersByUser(userId));
     }
 
     @GetMapping("/{id}")

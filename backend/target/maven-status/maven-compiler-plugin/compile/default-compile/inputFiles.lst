@@ -12,6 +12,8 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Role.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/User.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Wishlist.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/GuestTrackRequest.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/GuestTrackResponse.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/JwtResponse.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/LoginRequest.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/RegisterRequest.java

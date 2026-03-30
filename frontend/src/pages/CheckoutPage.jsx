@@ -19,6 +19,7 @@ export default function CheckoutPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
   const [useSavedDetails, setUseSavedDetails] = useState(false);
   const [savedProfile, setSavedProfile] = useState(null);
 
@@ -88,6 +89,10 @@ export default function CheckoutPage() {
       setError('Detailed customer name, phone number, and delivery address are mandatory.');
       return;
     }
+    if (!user && !guestEmail.trim()) {
+      setError('Please enter your email address so you can track your order.');
+      return;
+    }
 
     setIsSubmitting(true);
     setError('');
@@ -99,7 +104,10 @@ export default function CheckoutPage() {
     formData.append('phoneNumber', phoneNumber.trim());
     formData.append('address', address.trim());
     formData.append('note', note.trim());
-    
+    if (!user && guestEmail.trim()) {
+      formData.append('guestEmail', guestEmail.trim().toLowerCase());
+    }
+
     // Convert cart to productId:quantity Map
     const itemsMap = {};
     cart.forEach(item => {
@@ -111,7 +119,9 @@ export default function CheckoutPage() {
       const res = await checkoutOrder(formData);
       const orderId = res.data.id;
       clearCart();
-      navigate(`/track/${orderId}`);
+      navigate(`/track/${orderId}`, {
+        state: { guestEmail: !user ? guestEmail.trim().toLowerCase() : undefined }
+      });
     } catch (err) {
       const msg = err.response?.data?.error || 'Checkout failed. Please try again.';
       setError(msg);
@@ -239,6 +249,24 @@ export default function CheckoutPage() {
                     className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
                 />
               </div>
+
+              {!user && (
+                <div className="space-y-1 pt-2 border-t border-[var(--color-outline-variant)]/20">
+                  <label className="text-[10px] uppercase font-bold text-[var(--color-outline)] ml-1">
+                    Email Address <span className="text-[var(--color-error)]">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={guestEmail}
+                    onChange={e => setGuestEmail(e.target.value)}
+                    placeholder="you@example.com — used to track your order"
+                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
+                  />
+                  <p className="text-[10px] text-[var(--color-outline)] ml-1 mt-1">
+                    We'll use this to let you track your order later. No account needed.
+                  </p>
+                </div>
+              )}
             </section>
 
             {/* Bank Transfer Details */}

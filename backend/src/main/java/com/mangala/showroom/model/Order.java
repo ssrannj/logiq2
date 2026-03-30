@@ -42,6 +42,9 @@ public class Order {
     @Column
     private Long userId;
 
+    @Column
+    private String guestEmail;
+
     @ElementCollection
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyColumn(name = "product_id")
@@ -94,4 +97,6 @@ public class Order {
 
     public Map<Long, Integer> getItems() { return items; }
     public void setItems(Map<Long, Integer> items) { this.items = items; }
+    public String getGuestEmail() { return guestEmail; }
+    public void setGuestEmail(String guestEmail) { this.guestEmail = guestEmail; }
 }

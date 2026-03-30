@@ -21,6 +21,7 @@ export default function App() {
             <Route path="/catalog" element={<CatalogPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/checkout/:productId" element={<CheckoutPage />} />
+            <Route path="/track" element={<TrackingPage />} />
             <Route path="/track/:orderId" element={<TrackingPage />} />
             <Route path="/auth" element={<AuthPage />} />
             

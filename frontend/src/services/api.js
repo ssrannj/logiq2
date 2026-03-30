@@ -48,6 +48,10 @@ export const updateOrderStatus = (id, status) =>
 // ─── User Profile ────────────────────────────────────────────────────────────
 export const getUserProfile = () => API.get('/api/user/profile');
 
+// ─── Guest Order Tracking ─────────────────────────────────────────────────────
+export const trackGuestOrder = (orderId, email) =>
+  API.post('/api/orders/track-guest', { orderId, email });
+
 // ─── Wishlist (Requires Auth) ────────────────────────────────────────────────
 export const addToWishlist = (productId) =>
   API.post('/api/wishlist', { productId });
