@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { getMyOrders, getWishlist } from '../services/api';
+import { getMyOrders, getWishlist, getWarranties } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function CustomerDashboard() {
@@ -10,8 +10,10 @@ export default function CustomerDashboard() {
 
   const [orders, setOrders] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [warranties, setWarranties] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [loadingWishlist, setLoadingWishlist] = useState(true);
+  const [loadingWarranties, setLoadingWarranties] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -34,6 +36,15 @@ export default function CustomerDashboard() {
       setWishlist([]);
     } finally {
       setLoadingWishlist(false);
+    }
+
+    try {
+      const warRes = await getWarranties();
+      setWarranties(warRes.data);
+    } catch {
+      setWarranties([]);
+    } finally {
+      setLoadingWarranties(false);
     }
   };
 
@@ -218,6 +229,98 @@ export default function CustomerDashboard() {
                );
             })}
           </div>
+        </section>
+
+        {/* Warranties Section */}
+        <section className="mb-20">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <h2 className="text-3xl font-headline font-bold tracking-tight">Warranty Vault</h2>
+              <p className="text-[#40493c] text-sm mt-1">Active and expired product guarantees from your delivered orders.</p>
+            </div>
+            <span className="text-[#005a07] font-headline font-bold text-xs uppercase tracking-widest border-b border-[#005a07]/20 pb-1">
+              {warranties.filter(w => w.active).length} Active
+            </span>
+          </div>
+
+          {loadingWarranties && (
+            <div className="text-sm italic text-zinc-500">Loading warranties...</div>
+          )}
+
+          {!loadingWarranties && warranties.length === 0 && (
+            <div className="p-8 bg-white border border-[#e4e2e2] rounded-lg text-sm italic text-[#707a6b]">
+              No warranties found. Warranties appear once your orders are delivered and the product has a warranty period set.
+            </div>
+          )}
+
+          {!loadingWarranties && warranties.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {warranties.map((w, idx) => {
+                const totalDays = w.warrantyMonths * 30;
+                const elapsed = totalDays - Math.max(w.remainingDays, 0);
+                const pct = Math.min(100, Math.max(0, (elapsed / totalDays) * 100));
+                const years = Math.floor(w.remainingDays / 365);
+                const months = Math.floor((w.remainingDays % 365) / 30);
+                const days = w.remainingDays % 30;
+
+                let timeLabel = '';
+                if (w.remainingDays <= 0) {
+                  timeLabel = 'Expired';
+                } else if (years > 0) {
+                  timeLabel = `${years}y ${months}m remaining`;
+                } else if (months > 0) {
+                  timeLabel = `${months}m ${days}d remaining`;
+                } else {
+                  timeLabel = `${w.remainingDays}d remaining`;
+                }
+
+                return (
+                  <div key={idx} className={`bg-white rounded-lg border p-6 shadow-sm relative overflow-hidden ${w.active ? 'border-[#e4e2e2]' : 'border-[#e4e2e2] opacity-60'}`}>
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1 min-w-0 pr-3">
+                        <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-[#40493c] mb-1">
+                          {w.warrantyMonths} Month Warranty
+                        </p>
+                        <h4 className="font-headline font-bold text-base leading-tight truncate">{w.productName}</h4>
+                      </div>
+                      <span className={`flex-shrink-0 text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter ${w.active ? 'bg-green-100 text-green-800' : 'bg-zinc-100 text-zinc-500'}`}>
+                        {w.active ? 'Active' : 'Expired'}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1 mb-4 text-xs text-[#40493c]">
+                      <div className="flex justify-between">
+                        <span>Delivered</span>
+                        <span className="font-semibold">{new Date(w.deliveredDate).toLocaleDateString('en-LK', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Expires</span>
+                        <span className={`font-semibold ${w.active ? 'text-[#1b1c1c]' : 'text-red-500'}`}>
+                          {new Date(w.expiryDate).toLocaleDateString('en-LK', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mb-1">
+                      <div className="h-1 bg-[#eae8e7] rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-700 ${w.active ? (pct > 80 ? 'bg-orange-400' : 'bg-[#005a07]') : 'bg-zinc-300'}`}
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                    </div>
+                    <p className={`text-[10px] font-headline font-bold uppercase tracking-widest mt-2 ${w.active ? (w.remainingDays < 30 ? 'text-orange-600' : 'text-[#005a07]') : 'text-zinc-400'}`}>
+                      {timeLabel}
+                    </p>
+
+                    <div className="absolute -right-6 -bottom-6 opacity-[0.04] pointer-events-none">
+                      <span className="material-symbols-outlined text-[120px]">verified_user</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* Wishlist Grid */}

@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -87,6 +88,9 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found: " + id));
         order.setStatus(status);
+        if (status == OrderStatus.DELIVERED && order.getDeliveredAt() == null) {
+            order.setDeliveredAt(LocalDate.now());
+        }
         return orderRepository.save(order);
     }
 }

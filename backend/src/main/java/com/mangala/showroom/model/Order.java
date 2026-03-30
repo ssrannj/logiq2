@@ -2,6 +2,7 @@ package com.mangala.showroom.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,9 @@ public class Order {
 
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    @Column
+    private LocalDate deliveredAt;
 
     @Column
     private Long userId;
@@ -97,6 +101,10 @@ public class Order {
 
     public Map<Long, Integer> getItems() { return items; }
     public void setItems(Map<Long, Integer> items) { this.items = items; }
+
     public String getGuestEmail() { return guestEmail; }
     public void setGuestEmail(String guestEmail) { this.guestEmail = guestEmail; }
+
+    public LocalDate getDeliveredAt() { return deliveredAt; }
+    public void setDeliveredAt(LocalDate deliveredAt) { this.deliveredAt = deliveredAt; }
 }

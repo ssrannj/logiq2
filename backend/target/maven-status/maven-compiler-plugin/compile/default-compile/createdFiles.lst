@@ -3,8 +3,8 @@ com/mangala/showroom/payload/GuestTrackResponse.class
 com/mangala/showroom/controller/AuthController.class
 com/mangala/showroom/controller/UserController.class
 com/mangala/showroom/model/User.class
-com/mangala/showroom/security/UserDetailsServiceImpl.class
 com/mangala/showroom/security/UserDetailsImpl.class
+com/mangala/showroom/security/UserDetailsServiceImpl.class
 com/mangala/showroom/security/AuthEntryPointJwt.class
 com/mangala/showroom/controller/ProductController.class
 com/mangala/showroom/controller/WishlistController.class
@@ -23,6 +23,7 @@ com/mangala/showroom/repository/ProductRepository.class
 com/mangala/showroom/model/Wishlist.class
 com/mangala/showroom/repository/WishlistRepository.class
 com/mangala/showroom/config/WebConfig.class
+com/mangala/showroom/payload/WarrantyItem.class
 com/mangala/showroom/repository/UserRepository.class
 com/mangala/showroom/model/Role.class
 com/mangala/showroom/payload/JwtResponse.class
