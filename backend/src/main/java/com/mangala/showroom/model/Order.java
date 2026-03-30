@@ -49,6 +49,9 @@ public class Order {
     @Column
     private String guestEmail;
 
+    @Column
+    private String notificationEmail;
+
     @ElementCollection
     @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
     @MapKeyColumn(name = "product_id")
@@ -104,6 +107,9 @@ public class Order {
 
     public String getGuestEmail() { return guestEmail; }
     public void setGuestEmail(String guestEmail) { this.guestEmail = guestEmail; }
+
+    public String getNotificationEmail() { return notificationEmail; }
+    public void setNotificationEmail(String notificationEmail) { this.notificationEmail = notificationEmail; }
 
     public LocalDate getDeliveredAt() { return deliveredAt; }
     public void setDeliveredAt(LocalDate deliveredAt) { this.deliveredAt = deliveredAt; }

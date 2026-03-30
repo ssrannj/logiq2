@@ -73,7 +73,8 @@ public class OrderController {
             @RequestParam("phoneNumber") String phoneNumber,
             @RequestParam("address") String address,
             @RequestParam(value = "note", required = false) String note,
-            @RequestParam(value = "guestEmail", required = false) String guestEmail
+            @RequestParam(value = "guestEmail", required = false) String guestEmail,
+            @RequestParam(value = "notificationEmail", required = false) String notificationEmail
     ) {
         if (slip == null || slip.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Payment slip is required."));
@@ -85,7 +86,7 @@ public class OrderController {
             String emailToStore = (userId == null) ? guestEmail : null;
 
             Order savedOrder = orderService.checkout(
-                    slip, items, total, customerName, phoneNumber, address, note, userId, emailToStore
+                    slip, items, total, customerName, phoneNumber, address, note, userId, emailToStore, notificationEmail
             );
 
             return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
@@ -194,9 +195,14 @@ public class OrderController {
             Order updated = orderService.updateStatus(id, newStatus);
 
             if (newStatus == OrderStatus.ORDER_CONFIRMED) {
-                String customerEmail = resolveOrderEmail(updated);
-                if (customerEmail != null) {
-                    emailService.sendPaymentVerifiedEmail(customerEmail, updated.getId(), updated.getTotal());
+                String primaryEmail = resolveOrderEmail(updated);
+                if (primaryEmail != null) {
+                    emailService.sendPaymentVerifiedEmail(primaryEmail, updated.getId(), updated.getTotal());
+                }
+                String notifEmail = updated.getNotificationEmail();
+                if (notifEmail != null && !notifEmail.isBlank() &&
+                        (primaryEmail == null || !notifEmail.equalsIgnoreCase(primaryEmail))) {
+                    emailService.sendPaymentVerifiedEmail(notifEmail, updated.getId(), updated.getTotal());
                 }
             }
 

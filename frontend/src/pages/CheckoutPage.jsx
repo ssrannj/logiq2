@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
+  const [notificationEmail, setNotificationEmail] = useState('');
   const [useSavedDetails, setUseSavedDetails] = useState(false);
   const [savedProfile, setSavedProfile] = useState(null);
 
@@ -106,6 +107,9 @@ export default function CheckoutPage() {
     formData.append('note', note.trim());
     if (!user && guestEmail.trim()) {
       formData.append('guestEmail', guestEmail.trim().toLowerCase());
+    }
+    if (notificationEmail.trim()) {
+      formData.append('notificationEmail', notificationEmail.trim().toLowerCase());
     }
 
     // Convert cart to productId:quantity Map
@@ -250,23 +254,54 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              {!user && (
-                <div className="space-y-1 pt-2 border-t border-[var(--color-outline-variant)]/20">
+              <div className="pt-2 border-t border-[var(--color-outline-variant)]/20 space-y-4">
+                {user ? (
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-[var(--color-outline)] ml-1">
+                      Account Email — Confirmation goes here
+                    </label>
+                    <div className="flex items-center gap-3 w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container)] border border-[var(--color-outline-variant)]/30 text-sm text-[var(--color-on-surface-variant)]">
+                      <span className="material-symbols-outlined text-[var(--color-primary)] text-base" style={{ fontVariationSettings: '"FILL" 1' }}>mark_email_read</span>
+                      <span className="font-medium">{savedProfile?.email || user?.email || '—'}</span>
+                    </div>
+                    <p className="text-[10px] text-[var(--color-outline)] ml-1">
+                      Order confirmation will be sent to your account email automatically.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-[var(--color-outline)] ml-1">
+                      Email Address <span className="text-[var(--color-error)]">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      value={guestEmail}
+                      onChange={e => setGuestEmail(e.target.value)}
+                      placeholder="you@example.com — used to track your order"
+                      className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
+                    />
+                    <p className="text-[10px] text-[var(--color-outline)] ml-1">
+                      We'll use this to let you track your order later. No account needed.
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-[var(--color-outline)] ml-1">
-                    Email Address <span className="text-[var(--color-error)]">*</span>
+                    Secondary Notification Email <span className="text-[var(--color-outline)]">(Optional)</span>
                   </label>
                   <input
                     type="email"
-                    value={guestEmail}
-                    onChange={e => setGuestEmail(e.target.value)}
-                    placeholder="you@example.com — used to track your order"
+                    value={notificationEmail}
+                    onChange={e => setNotificationEmail(e.target.value)}
+                    placeholder="e.g. spouse, family member, office — also gets the confirmation"
                     className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
                   />
-                  <p className="text-[10px] text-[var(--color-outline)] ml-1 mt-1">
-                    We'll use this to let you track your order later. No account needed.
+                  <p className="text-[10px] text-[var(--color-outline)] ml-1">
+                    If provided, this address will also receive the payment confirmation when your order is approved.
                   </p>
                 </div>
-              )}
+              </div>
             </section>
 
             {/* Bank Transfer Details */}

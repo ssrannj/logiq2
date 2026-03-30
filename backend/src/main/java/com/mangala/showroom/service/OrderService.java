@@ -38,7 +38,8 @@ public class OrderService {
             String address,
             String note,
             Long userId,
-            String guestEmail
+            String guestEmail,
+            String notificationEmail
     ) throws IOException {
         
         // Ensure upload directory exists
@@ -67,6 +68,7 @@ public class OrderService {
         order.setNote(note);
         order.setUserId(userId);
         order.setGuestEmail(guestEmail);
+        order.setNotificationEmail(notificationEmail != null && !notificationEmail.isBlank() ? notificationEmail.trim().toLowerCase() : null);
         order.setItems(items);
 
         return orderRepository.save(order);
