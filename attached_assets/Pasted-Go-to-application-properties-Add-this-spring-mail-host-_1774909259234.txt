@@ -1,0 +1,65 @@
+Go to application.properties
+
+Add this:
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=jeyanthansaran@gmail.com
+spring.mail.password=cidh pzkn mjql mpib
+
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+
+Create a Spring Boot EmailService using JavaMailSender.
+
+Features:
+- sendSimpleEmail(to, subject, body)
+- sendPaymentSuccessEmail(to, orderId)
+- sendWishlistNotificationEmail(to, productName)
+
+Use jeyanthansaran@gmail.com as sender.
+
+@Service
+public class EmailService {
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    private final String FROM_EMAIL = "jeyanthansaran@gmail.com";
+
+    public void sendSimpleEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(FROM_EMAIL);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
+
+    public void sendPaymentSuccessEmail(String to, String orderId) {
+        String subject = "Payment Verified - Thank You!";
+        String body = "Your payment for Order ID " + orderId + " has been successfully verified.\n\nThank you for shopping with us!";
+        sendSimpleEmail(to, subject, body);
+    }
+
+    public void sendWishlistNotificationEmail(String to, String productName) {
+        String subject = "Item Back in Stock!";
+        String body = productName + " is now back in stock. Grab it before it runs out!";
+        sendSimpleEmail(to, subject, body);
+    }
+}
+
+🟢 1. After Admin Verifies Payment
+
+In your service/controller:
+
+emailService.sendPaymentSuccessEmail(order.getEmail(), order.getId());
+🟢 2. Wishlist Notification
+
+In your scheduler:
+
+emailService.sendWishlistNotificationEmail(user.getEmail(), product.getName());
+🟢 3. Secondary Email (if exists)
+if(order.getSecondaryEmail() != null) {
+    emailService.sendPaymentSuccessEmail(order.getSecondaryEmail(), order.getId());
+}

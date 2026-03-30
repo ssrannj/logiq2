@@ -1,61 +1,47 @@
 package com.mangala.showroom.service;
 
+import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 @Service
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
-    private static final String RESEND_API_URL = "https://api.resend.com/emails";
 
-    @Value("${resend.api.key:}")
-    private String resendApiKey;
+    @Autowired(required = false)
+    private JavaMailSender mailSender;
 
-    @Value("${app.mail.from:onboarding@resend.dev}")
+    @Value("${spring.mail.username:}")
     private String fromAddress;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-
     private boolean isConfigured() {
-        return resendApiKey != null && !resendApiKey.isBlank();
+        return mailSender != null && fromAddress != null && !fromAddress.isBlank();
     }
 
     private void send(String to, String subject, String html) {
         if (!isConfigured()) {
-            log.warn("RESEND_API_KEY not set — skipping email to {}", to);
+            log.warn("Mail not configured — skipping email to {}", to);
             return;
         }
         try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(resendApiKey);
-
-            Map<String, Object> body = Map.of(
-                "from", fromAddress,
-                "to", List.of(to),
-                "subject", subject,
-                "html", html
-            );
-
-            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(RESEND_API_URL, request, String.class);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                log.info("Email sent via Resend to {} — subject: {}", to, subject);
-            } else {
-                log.error("Resend returned non-2xx status {} for email to {}: {}", response.getStatusCode(), to, response.getBody());
-            }
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setFrom(fromAddress);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(html, true);
+            mailSender.send(message);
+            log.info("Email sent to {} — subject: {}", to, subject);
         } catch (Exception e) {
-            log.error("Failed to send email via Resend to {}: {}", to, e.getMessage());
+            log.error("Failed to send email to {}: {}", to, e.getMessage());
         }
     }
 
