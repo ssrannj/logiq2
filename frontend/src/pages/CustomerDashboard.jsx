@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
+import OrderTrackingView, { STATUS_LABEL, formatPrice as fmtPrice } from '../components/OrderTrackingView';
 import { getMyOrders, getWishlist, getWarranties } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,6 +15,7 @@ export default function CustomerDashboard() {
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [loadingWishlist, setLoadingWishlist] = useState(true);
   const [loadingWarranties, setLoadingWarranties] = useState(true);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -51,9 +53,6 @@ export default function CustomerDashboard() {
   const currentPoints = user?.points || 15550;
   const maxPoints = 16000;
   const pointsPercentage = Math.min((currentPoints / maxPoints) * 100, 100);
-
-  const formatPrice = (price) =>
-    `Rs. ${Number(price).toLocaleString('en-LK', { minimumFractionDigits: 2 })}`;
 
   return (
     <div className="bg-[#fbf9f8] text-[#1b1c1c] selection:bg-[#1d741b] selection:text-white min-h-screen font-body">
@@ -126,7 +125,7 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
-        {/* Recent Orders Tracking Stepper */}
+        {/* Order History — full tracking view */}
         <section className="mb-20">
           <div className="flex justify-between items-end mb-8">
             <div>
@@ -135,98 +134,73 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {loadingOrders && <div className="p-8 text-sm italic text-zinc-500">Decrypting Ledgers...</div>}
-            {!loadingOrders && orders.length === 0 && <div className="p-8 text-sm italic text-zinc-500">No active pipelines found. Visit the <a href="/catalog" className="underline text-green-900 font-bold">Showroom</a>.</div>}
-            
+          {loadingOrders && (
+            <div className="p-8 text-sm italic text-zinc-500">Decrypting Ledgers…</div>
+          )}
+          {!loadingOrders && orders.length === 0 && (
+            <div className="p-8 bg-white border border-[#e4e2e2] rounded-lg text-sm italic text-zinc-500">
+              No active pipelines found. Visit the <a href="/catalog" className="underline text-green-900 font-bold">Showroom</a>.
+            </div>
+          )}
+
+          <div className="flex flex-col gap-6">
             {!loadingOrders && orders.map(o => {
-               // Stepper Logic calculations
-               const STATUS_STEPS = [
-                 'PENDING_PAYMENT', 'PAYMENT_VERIFICATION_IN_PROGRESS', 'ORDER_CONFIRMED',
-                 'PROCESSING', 'PACKED', 'READY_FOR_DISPATCH', 'HANDED_OVER_TO_SHIPPING',
-                 'IN_TRANSIT', 'ARRIVED_AT_REGIONAL_HUB', 'OUT_FOR_DELIVERY', 'DELIVERED',
-               ];
-               const isCancelled = o.status === 'CANCELLED';
-               const isDelayed = o.status === 'DELIVERY_DELAYED';
-               const effectiveSt = isDelayed ? 'OUT_FOR_DELIVERY' : o.status;
-               const statusIdx = STATUS_STEPS.indexOf(effectiveSt);
-               const step1Done = !isCancelled && statusIdx >= 0;
-               const step2Done = !isCancelled && statusIdx >= 2;
-               const step3Done = !isCancelled && statusIdx >= 6;
-               const isDelivered = o.status === 'DELIVERED';
+              const isExpanded = expandedOrderId === o.id;
 
-               return (
-                  <div key={o.id} className="bg-white p-8 rounded-lg shadow-sm border border-[#e4e2e2]">
-                    <div className="flex justify-between items-start mb-10">
-                      <div className="flex gap-6">
-                        <div className="w-24 h-24 bg-[#f5f3f3] rounded-sm overflow-hidden flex-shrink-0 border border-[#e4e2e2] flex items-center justify-center">
-                           <span className="material-symbols-outlined text-4xl text-[#bfcab8]">inventory_2</span>
-                        </div>
-                        <div>
-                          <span className="text-[10px] font-headline font-bold text-zinc-400 uppercase tracking-widest mb-1 block">
-                            Trace #{o.id.toString().padStart(6, '0')}
-                          </span>
-                          <h4 className="text-xl font-headline font-bold mb-1">
-                            Pieces Ordered: {Object.values(o.items || {}).reduce((a,b)=>a+b, 0)}
-                          </h4>
-                          <p className="text-[#005a07] font-bold">Rs. {o.total.toLocaleString()}</p>
-                        </div>
+              const badgeClass =
+                o.status === 'DELIVERED'      ? 'bg-green-100 text-green-800' :
+                o.status === 'CANCELLED'      ? 'bg-red-100 text-red-700' :
+                o.status === 'DELIVERY_DELAYED' ? 'bg-orange-100 text-orange-700' :
+                'bg-[#f6e63e]/20 text-[#686000]';
+
+              return (
+                <div key={o.id} className="bg-white rounded-xl border border-[#e4e2e2] shadow-sm overflow-hidden">
+                  {/* Collapsed summary row — always visible */}
+                  <button
+                    onClick={() => setExpandedOrderId(isExpanded ? null : o.id)}
+                    className="w-full text-left p-6 flex items-center justify-between gap-4 hover:bg-[#fbf9f8] transition-colors"
+                  >
+                    <div className="flex items-center gap-5 min-w-0">
+                      <div className="w-12 h-12 bg-[#f5f3f3] rounded-lg border border-[#e4e2e2] flex items-center justify-center shrink-0">
+                        <span className="material-symbols-outlined text-2xl text-[#bfcab8]">inventory_2</span>
                       </div>
-                      <div className={`text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter
-                        ${o.status === 'DELIVERED' ? 'bg-green-100 text-green-800' : ''}
-                        ${o.status === 'CANCELLED' ? 'bg-red-100 text-red-700' : ''}
-                        ${o.status === 'DELIVERY_DELAYED' ? 'bg-orange-100 text-orange-700' : ''}
-                        ${!['DELIVERED','CANCELLED','DELIVERY_DELAYED'].includes(o.status) ? 'bg-[#f6e63e]/20 text-[#686000]' : ''}
-                      `}>
-                        {o.status.replace(/_/g, ' ')}
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-headline font-bold text-zinc-400 uppercase tracking-widest mb-0.5">
+                          Order #MS-{String(o.id).padStart(5, '0')}
+                        </p>
+                        <p className="font-headline font-bold text-base truncate">
+                          {Object.values(o.items || {}).reduce((a, b) => a + b, 0)} piece{Object.values(o.items || {}).reduce((a, b) => a + b, 0) !== 1 ? 's' : ''}
+                        </p>
+                        <p className="text-[#005a07] font-bold text-sm">{fmtPrice(o.total)}</p>
                       </div>
                     </div>
 
-                    {/* Milestone Stepper */}
-                    <div className="relative pt-4">
-                      {/* Background Bar */}
-                      <div className="absolute top-7 left-0 w-full h-[1px] bg-[#bfcab8]/30 z-0"></div>
-                      
-                      <div className="relative z-10 flex justify-between">
-                        
-                        {/* Step 1: Payment */}
-                        <div className="text-center group">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step1Done ? 'bg-[#005a07]' : isCancelled ? 'bg-red-500' : 'bg-[#e4e2e2]'}`}>
-                            {isCancelled ? <span className="material-symbols-outlined text-[12px]">close</span> : <span className="material-symbols-outlined text-[12px]">check</span>}
-                          </div>
-                          <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-[#1b1c1c]">Payment</span>
-                        </div>
-
-                        {/* Step 2: Preparing */}
-                        <div className={`text-center group ${!step2Done ? 'opacity-30' : ''}`}>
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step2Done ? 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
-                             {step2Done ? <span className="material-symbols-outlined text-[12px]">check</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">package_2</span>}
-                          </div>
-                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${step2Done ? 'text-[#1b1c1c]' : 'text-[#707a6b]'}`}>Preparing</span>
-                        </div>
-
-                        {/* Step 3: Shipping */}
-                        <div className={`text-center group ${!step3Done ? 'opacity-30' : ''}`}>
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step3Done ? isDelayed ? 'bg-orange-500' : 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
-                            {step3Done ? <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_shipping</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">local_shipping</span>}
-                          </div>
-                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${step3Done ? isDelayed ? 'text-orange-600' : 'text-[#005a07]' : 'text-[#707a6b]'}`}>
-                            {isDelayed ? 'Delayed' : 'Shipping'}
-                          </span>
-                        </div>
-
-                        {/* Step 4: Delivered */}
-                        <div className={`text-center group ${!isDelivered ? 'opacity-30' : ''}`}>
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${isDelivered ? 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
-                            {isDelivered ? <span className="material-symbols-outlined text-[12px]">check</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">home</span>}
-                          </div>
-                          <span className="text-[10px] font-headline font-bold uppercase tracking-widest">Delivered</span>
-                        </div>
-
-                      </div>
+                    <div className="flex items-center gap-4 shrink-0">
+                      <span className={`text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter ${badgeClass}`}>
+                        {STATUS_LABEL[o.status] || o.status.replace(/_/g, ' ')}
+                      </span>
+                      <span className="material-symbols-outlined text-[#40493c] text-xl transition-transform duration-300" style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        expand_more
+                      </span>
                     </div>
-                  </div>
-               );
+                  </button>
+
+                  {/* Expanded full tracking view */}
+                  {isExpanded && (
+                    <div
+                      className="border-t border-[#e4e2e2] px-6 py-8"
+                      style={{ background: 'var(--color-surface, #fbf9f8)', fontFamily: 'Inter' }}
+                    >
+                      <OrderTrackingView
+                        order={{ ...o, orderId: o.id }}
+                        navigate={navigate}
+                        onBack={() => setExpandedOrderId(null)}
+                        compact={true}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
             })}
           </div>
         </section>
