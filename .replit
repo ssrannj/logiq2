@@ -57,3 +57,9 @@ externalPort = 8080
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "export MAVEN_HOME=/home/runner/workspace/maven/apache-maven-3.9.9 && export PATH=$MAVEN_HOME/bin:$PATH && cd backend && java -jar target/showroom-0.0.1-SNAPSHOT.jar &  cd frontend && npx serve -s dist -l 5000"]
 build = ["bash", "-c", "export MAVEN_HOME=/home/runner/workspace/maven/apache-maven-3.9.9 && export PATH=$MAVEN_HOME/bin:$PATH && cd backend && mvn clean package -DskipTests && cd ../frontend && npm install && npm run build"]
+
+[userenv]
+
+[userenv.shared]
+MAIL_USERNAME = "jimmyxsaran@gmail.com"
+MAIL_PASSWORD = "Jimmy@2@19"
