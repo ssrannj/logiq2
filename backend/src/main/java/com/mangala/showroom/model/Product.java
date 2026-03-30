@@ -28,6 +28,12 @@ public class Product {
 
     private String brand;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column
+    private Integer warrantyPeriodMonths;
+
     // ---- Constructors ----
 
     public Product() {}
@@ -63,4 +69,10 @@ public class Product {
 
     public String getBrand() { return brand; }
     public void setBrand(String brand) { this.brand = brand; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    public Integer getWarrantyPeriodMonths() { return warrantyPeriodMonths; }
+    public void setWarrantyPeriodMonths(Integer warrantyPeriodMonths) { this.warrantyPeriodMonths = warrantyPeriodMonths; }
 }

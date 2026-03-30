@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProducts, addProduct, deleteProduct, getAllOrders, updateOrderStatus } from '../services/api';
+import { getProducts, addProduct, deleteProduct, getAllOrders, updateOrderStatus, updateProduct } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminDashboard() {
@@ -18,6 +18,14 @@ export default function AdminDashboard() {
     name: '', price: '', stockCount: '', category: 'Living', imageUrl: '', brand: ''
   });
   const [showAddModal, setShowAddModal] = useState(false);
+
+  // Edit Product Modal State
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: '', description: '', price: '', quantity: '', category: '', warrantyPeriodMonths: ''
+  });
+  const [editError, setEditError] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -68,6 +76,42 @@ export default function AdminDashboard() {
     }
   };
 
+  const openEditModal = (product) => {
+    setEditingProduct(product);
+    setEditForm({
+      name: product.name || '',
+      description: product.description || '',
+      price: product.price !== undefined ? String(product.price) : '',
+      quantity: product.stockCount !== undefined ? String(product.stockCount) : '',
+      category: product.category || 'Living',
+      warrantyPeriodMonths: product.warrantyPeriodMonths !== undefined && product.warrantyPeriodMonths !== null
+        ? String(product.warrantyPeriodMonths) : '',
+    });
+    setEditError('');
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setEditSaving(true);
+    setEditError('');
+    try {
+      await updateProduct(editingProduct.id, {
+        name: editForm.name,
+        description: editForm.description,
+        price: editForm.price !== '' ? parseFloat(editForm.price) : null,
+        quantity: editForm.quantity !== '' ? parseInt(editForm.quantity, 10) : null,
+        category: editForm.category,
+        warrantyPeriodMonths: editForm.warrantyPeriodMonths !== '' ? parseInt(editForm.warrantyPeriodMonths, 10) : null,
+      });
+      setEditingProduct(null);
+      fetchData();
+    } catch (err) {
+      setEditError(err.response?.data?.error || 'Failed to save changes.');
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   const handleUpdateOrderStatus = async (id, status) => {
     try {
       await updateOrderStatus(id, status);
@@ -79,6 +123,123 @@ export default function AdminDashboard() {
 
   return (
     <div className="text-[#1b1c1c] bg-[#fbf9f8] min-h-screen flex font-body">
+
+      {/* ── Edit Product Modal ── */}
+      {editingProduct && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="bg-white w-full max-w-xl rounded-2xl shadow-2xl border border-[#e4e2e2] overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex justify-between items-center px-8 py-6 border-b border-[#f0eded]">
+              <div>
+                <h2 className="font-headline text-lg font-bold text-[#1b1c1c]">Edit Product</h2>
+                <p className="text-xs text-[#707a6b] mt-0.5">ID #{editingProduct.id} — changes save immediately</p>
+              </div>
+              <button onClick={() => setEditingProduct(null)} className="text-zinc-400 hover:text-zinc-600 transition-colors">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleEditSubmit} className="px-8 py-6 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Name</label>
+                  <input
+                    required
+                    value={editForm.name}
+                    onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                    placeholder="Product name"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Category</label>
+                  <select
+                    value={editForm.category}
+                    onChange={e => setEditForm({ ...editForm, category: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                  >
+                    <option value="Living">Living Room</option>
+                    <option value="Kitchen">Kitchen</option>
+                    <option value="Bedroom">Bedroom</option>
+                    <option value="Electronics">Electronics</option>
+                  </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Price (LKR)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={editForm.price}
+                    onChange={e => setEditForm({ ...editForm, price: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Quantity in Stock</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editForm.quantity}
+                    onChange={e => setEditForm({ ...editForm, quantity: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                    placeholder="0"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Warranty (months)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={editForm.warrantyPeriodMonths}
+                    onChange={e => setEditForm({ ...editForm, warrantyPeriodMonths: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                    placeholder="e.g. 24"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Description</label>
+                <textarea
+                  rows={3}
+                  value={editForm.description}
+                  onChange={e => setEditForm({ ...editForm, description: e.target.value })}
+                  className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm resize-none"
+                  placeholder="Short product description…"
+                />
+              </div>
+
+              {editError && (
+                <p className="text-red-600 text-sm bg-red-50 px-4 py-2 rounded-lg">{editError}</p>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="submit"
+                  disabled={editSaving}
+                  className="flex-1 bg-gradient-to-br from-[#005a07] to-[#1d741b] text-white py-3 rounded-xl font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+                >
+                  {editSaving ? (
+                    <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Saving…</>
+                  ) : (
+                    <><span className="material-symbols-outlined text-base">save</span> Save Changes</>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct(null)}
+                  className="px-6 py-3 border border-[#e4e2e2] rounded-xl font-bold text-sm text-[#40493c] hover:bg-[#f5f3f3] transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       
       {/* Sidebar */}
       <aside className="h-screen w-64 fixed left-0 top-0 bg-[#fbf9f8] border-r border-[#e4e2e2] flex flex-col p-6 space-y-2 font-headline text-sm z-50">
@@ -277,9 +438,14 @@ export default function AdminDashboard() {
                       </td>
                       <td className="px-8 py-4 font-headline font-bold text-[#005a07]">Rs. {p.price.toLocaleString()}</td>
                       <td className="px-8 py-4 text-center">
-                        <button onClick={() => handleDeleteProduct(p.id)} className="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                          <span className="material-symbols-outlined text-sm block">delete</span>
-                        </button>
+                        <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={() => openEditModal(p)} className="text-[#005a07] hover:text-[#1d741b] bg-green-50 p-2 rounded-lg" title="Edit">
+                            <span className="material-symbols-outlined text-sm block">edit</span>
+                          </button>
+                          <button onClick={() => handleDeleteProduct(p.id)} className="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg" title="Delete">
+                            <span className="material-symbols-outlined text-sm block">delete</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

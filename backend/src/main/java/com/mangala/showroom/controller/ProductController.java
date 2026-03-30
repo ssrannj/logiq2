@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -49,6 +50,30 @@ public class ProductController {
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product savedProduct = productService.save(product);
         return ResponseEntity.status(201).body(savedProduct);
+    }
+
+    /**
+     * PUT /api/admin/products/{id}
+     * Admin only. Update editable fields of an existing product.
+     */
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Map<String, Object> body) {
+        try {
+            String name = (String) body.get("name");
+            String description = (String) body.get("description");
+            BigDecimal price = body.get("price") != null ? new BigDecimal(body.get("price").toString()) : null;
+            Integer quantity = body.get("quantity") != null ? Integer.valueOf(body.get("quantity").toString()) : null;
+            String category = (String) body.get("category");
+            Integer warrantyPeriodMonths = body.get("warrantyPeriodMonths") != null
+                    ? Integer.valueOf(body.get("warrantyPeriodMonths").toString()) : null;
+
+            Product updated = productService.updateProduct(id, name, description, price, quantity, category, warrantyPeriodMonths);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "Update failed: " + e.getMessage()));
+        }
     }
 
     /**

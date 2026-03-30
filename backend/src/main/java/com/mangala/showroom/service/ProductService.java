@@ -33,4 +33,17 @@ public class ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
+
+    public Product updateProduct(Long id, String name, String description, java.math.BigDecimal price,
+                                  Integer quantity, String category, Integer warrantyPeriodMonths) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found: " + id));
+        if (name != null && !name.isBlank()) product.setName(name);
+        if (description != null) product.setDescription(description);
+        if (price != null) product.setPrice(price);
+        if (quantity != null) product.setStockCount(quantity);
+        if (category != null && !category.isBlank()) product.setCategory(category);
+        if (warrantyPeriodMonths != null) product.setWarrantyPeriodMonths(warrantyPeriodMonths);
+        return productRepository.save(product);
+    }
 }

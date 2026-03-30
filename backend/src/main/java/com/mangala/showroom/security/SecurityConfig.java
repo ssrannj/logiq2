@@ -80,6 +80,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/orders/track-guest").permitAll() 
                     .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT, "/api/products/admin/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PATCH, "/api/orders/**").hasRole("ADMIN")
                     .anyRequest().authenticated()
             );

@@ -30,6 +30,7 @@ export const getProductById = (id) => API.get(`/api/products/${id}`);
 // Admin only
 export const addProduct = (data) => API.post('/api/products', data);
 export const deleteProduct = (id) => API.delete(`/api/products/${id}`);
+export const updateProduct = (id, data) => API.put(`/api/products/admin/${id}`, data);
 
 // ─── Orders ─────────────────────────────────────────────────────────────────
 export const checkoutOrder = (formData) =>
