@@ -10,7 +10,9 @@ com/mangala/showroom/controller/ProductController.class
 com/mangala/showroom/controller/WishlistController.class
 com/mangala/showroom/security/SecurityConfig.class
 com/mangala/showroom/payload/GuestTrackRequest.class
+com/mangala/showroom/service/EmailService.class
 com/mangala/showroom/service/ProductService.class
+com/mangala/showroom/service/WishlistNotificationScheduler.class
 com/mangala/showroom/model/Order.class
 com/mangala/showroom/config/DataInitializer.class
 com/mangala/showroom/config/WebConfig$1.class

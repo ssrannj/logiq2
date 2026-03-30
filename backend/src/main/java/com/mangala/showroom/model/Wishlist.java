@@ -20,6 +20,9 @@ public class Wishlist {
     @Column(updatable = false)
     private LocalDateTime addedAt;
 
+    @Column(nullable = false)
+    private boolean notified = false;
+
     // ---- Constructors ----
 
     public Wishlist() {}
@@ -47,4 +50,7 @@ public class Wishlist {
 
     public LocalDateTime getAddedAt() { return addedAt; }
     public void setAddedAt(LocalDateTime addedAt) { this.addedAt = addedAt; }
+
+    public boolean isNotified() { return notified; }
+    public void setNotified(boolean notified) { this.notified = notified; }
 }

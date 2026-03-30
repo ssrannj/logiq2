@@ -29,6 +29,8 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/security/SecurityConfig.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/security/UserDetailsImpl.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/security/UserDetailsServiceImpl.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/service/EmailService.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/service/OrderService.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/service/ProductService.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/service/WishlistNotificationScheduler.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/service/WishlistService.java

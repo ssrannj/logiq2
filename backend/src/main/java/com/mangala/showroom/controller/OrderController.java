@@ -8,6 +8,7 @@ import com.mangala.showroom.payload.GuestTrackRequest;
 import com.mangala.showroom.payload.GuestTrackResponse;
 import com.mangala.showroom.repository.UserRepository;
 import com.mangala.showroom.security.UserDetailsImpl;
+import com.mangala.showroom.service.EmailService;
 import com.mangala.showroom.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,9 @@ public class OrderController {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private EmailService emailService;
 
     private Long getCurrentUserId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -188,9 +192,26 @@ public class OrderController {
         try {
             OrderStatus newStatus = OrderStatus.valueOf(body.get("status"));
             Order updated = orderService.updateStatus(id, newStatus);
+
+            if (newStatus == OrderStatus.ORDER_CONFIRMED) {
+                String customerEmail = resolveOrderEmail(updated);
+                if (customerEmail != null) {
+                    emailService.sendPaymentVerifiedEmail(customerEmail, updated.getId(), updated.getTotal());
+                }
+            }
+
             return ResponseEntity.ok(updated);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("error", "Update failed"));
         }
+    }
+
+    private String resolveOrderEmail(Order order) {
+        if (order.getUserId() != null) {
+            return userRepository.findById(order.getUserId())
+                    .map(u -> u.getEmail())
+                    .orElse(null);
+        }
+        return order.getGuestEmail();
     }
 }
