@@ -46,8 +46,9 @@ public class AuthControllerTest {
     @Test
     public void shouldRegisterUserSuccessfully() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setName("Test User");
+        registerRequest.setFullName("Test User");
         registerRequest.setEmail("test@example.com");
+        registerRequest.setPhoneNumber("+94771234567");
         registerRequest.setPassword("password123");
 
         when(userRepository.existsByEmail("test@example.com")).thenReturn(false);
@@ -62,8 +63,9 @@ public class AuthControllerTest {
     @Test
     public void shouldReturnErrorWhenEmailExists() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setName("Test User");
+        registerRequest.setFullName("Test User");
         registerRequest.setEmail("existing@example.com");
+        registerRequest.setPhoneNumber("+94771234567");
         registerRequest.setPassword("password123");
 
         when(userRepository.existsByEmail("existing@example.com")).thenReturn(true);

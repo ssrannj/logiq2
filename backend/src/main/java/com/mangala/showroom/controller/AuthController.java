@@ -68,7 +68,7 @@ public class AuthController {
         }
 
         // Setup role as CUSTOMER by default
-        User user = new User(signUpRequest.getName(),
+        User user = new User(signUpRequest.getFullName(),
                              signUpRequest.getEmail(),
                              encoder.encode(signUpRequest.getPassword()),
                              Role.CUSTOMER);

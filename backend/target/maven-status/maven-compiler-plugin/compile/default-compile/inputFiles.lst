@@ -3,6 +3,7 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/config/WebConfig.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/AuthController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/CategoryController.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/GlobalExceptionHandler.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/OrderController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/ProductController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/UserController.java

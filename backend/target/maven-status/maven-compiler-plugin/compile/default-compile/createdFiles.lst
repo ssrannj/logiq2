@@ -10,6 +10,7 @@ com/mangala/showroom/security/AuthEntryPointJwt.class
 com/mangala/showroom/controller/ProductController.class
 com/mangala/showroom/controller/WishlistController.class
 com/mangala/showroom/security/SecurityConfig.class
+com/mangala/showroom/controller/GlobalExceptionHandler.class
 com/mangala/showroom/payload/GuestTrackRequest.class
 com/mangala/showroom/service/EmailService.class
 com/mangala/showroom/service/ProductService.class
