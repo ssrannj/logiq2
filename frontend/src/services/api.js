@@ -45,6 +45,9 @@ export const getAllOrders = () => API.get('/api/orders/all');
 export const updateOrderStatus = (id, status) =>
   API.patch(`/api/orders/${id}/status`, { status });
 
+// ─── User Profile ────────────────────────────────────────────────────────────
+export const getUserProfile = () => API.get('/api/user/profile');
+
 // ─── Wishlist (Requires Auth) ────────────────────────────────────────────────
 export const addToWishlist = (productId) =>
   API.post('/api/wishlist', { productId });

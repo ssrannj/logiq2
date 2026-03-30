@@ -1,5 +1,6 @@
 com/mangala/showroom/payload/LoginRequest.class
 com/mangala/showroom/controller/AuthController.class
+com/mangala/showroom/controller/UserController.class
 com/mangala/showroom/model/User.class
 com/mangala/showroom/security/UserDetailsServiceImpl.class
 com/mangala/showroom/security/UserDetailsImpl.class
@@ -26,6 +27,7 @@ com/mangala/showroom/controller/OrderController.class
 com/mangala/showroom/security/JwtUtils.class
 com/mangala/showroom/service/WishlistService.class
 com/mangala/showroom/security/AuthTokenFilter.class
+com/mangala/showroom/payload/UserProfileResponse.class
 com/mangala/showroom/ShowroomApplication.class
 com/mangala/showroom/model/OrderStatus.class
 com/mangala/showroom/model/Product.class

@@ -73,6 +73,10 @@ public class AuthController {
                              encoder.encode(signUpRequest.getPassword()),
                              Role.CUSTOMER);
 
+        user.setFullName(signUpRequest.getFullName());
+        user.setPhoneNumber(signUpRequest.getPhoneNumber());
+        user.setAddress(signUpRequest.getAddress());
+
         userRepository.save(user);
 
         return ResponseEntity.ok("User registered successfully!");

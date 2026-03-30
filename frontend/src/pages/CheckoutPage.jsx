@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { checkoutOrder } from '../services/api';
+import { checkoutOrder, getUserProfile } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -19,11 +19,30 @@ export default function CheckoutPage() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
-  
+  const [useSavedDetails, setUseSavedDetails] = useState(false);
+  const [savedProfile, setSavedProfile] = useState(null);
+
   const [isDragging, setIsDragging] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const fileInputRef = useRef();
+
+  useEffect(() => {
+    if (user) {
+      getUserProfile()
+        .then(res => {
+          const profile = res.data;
+          setSavedProfile(profile);
+          if (profile.fullName || profile.phoneNumber || profile.address) {
+            setUseSavedDetails(true);
+            setCustomerName(profile.fullName || profile.name || '');
+            setPhoneNumber(profile.phoneNumber || '');
+            setAddress(profile.address || '');
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user]);
 
   const handleFileChange = (file) => {
     if (!file) return;
@@ -123,13 +142,43 @@ export default function CheckoutPage() {
 
             {/* Delivery Details */}
             <section className="bg-[var(--color-surface-container-low)] p-8 rounded-xl space-y-6">
-              <h2
-                className="text-xl font-bold flex items-center gap-3"
-                style={{ fontFamily: 'Plus Jakarta Sans' }}
-              >
-                <span className="material-symbols-outlined text-[var(--color-primary)] text-3xl">local_shipping</span>
-                Delivery Details
-              </h2>
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <h2
+                  className="text-xl font-bold flex items-center gap-3"
+                  style={{ fontFamily: 'Plus Jakarta Sans' }}
+                >
+                  <span className="material-symbols-outlined text-[var(--color-primary)] text-3xl">local_shipping</span>
+                  Delivery Details
+                </h2>
+
+                {savedProfile && (savedProfile.fullName || savedProfile.phoneNumber || savedProfile.address) && (
+                  <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-[var(--color-on-surface-variant)]">
+                    <div
+                      onClick={() => {
+                        const next = !useSavedDetails;
+                        setUseSavedDetails(next);
+                        if (next) {
+                          setCustomerName(savedProfile.fullName || savedProfile.name || '');
+                          setPhoneNumber(savedProfile.phoneNumber || '');
+                          setAddress(savedProfile.address || '');
+                        } else {
+                          setCustomerName('');
+                          setPhoneNumber('');
+                          setAddress('');
+                        }
+                      }}
+                      className={`w-10 h-5 rounded-full transition-colors duration-200 flex items-center px-0.5 ${
+                        useSavedDetails ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-outline-variant)]'
+                      }`}
+                    >
+                      <div className={`w-4 h-4 rounded-full bg-white shadow transition-transform duration-200 ${
+                        useSavedDetails ? 'translate-x-5' : 'translate-x-0'
+                      }`} />
+                    </div>
+                    <span className="font-medium">Use saved details</span>
+                  </label>
+                )}
+              </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
@@ -137,9 +186,14 @@ export default function CheckoutPage() {
                     <input
                         type="text"
                         value={customerName}
-                        onChange={e => setCustomerName(e.target.value)}
+                        onChange={e => !useSavedDetails && setCustomerName(e.target.value)}
+                        readOnly={useSavedDetails}
                         placeholder="Recipient Name"
-                        className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
+                        className={`w-full px-4 py-3 rounded-lg border border-[var(--color-outline-variant)]/30 outline-none text-sm transition-colors ${
+                          useSavedDetails
+                            ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] cursor-not-allowed'
+                            : 'bg-[var(--color-surface-container-lowest)] focus:ring-2 focus:ring-[var(--color-primary)]/30'
+                        }`}
                     />
                 </div>
                 <div className="space-y-1">
@@ -147,9 +201,14 @@ export default function CheckoutPage() {
                     <input
                         type="tel"
                         value={phoneNumber}
-                        onChange={e => setPhoneNumber(e.target.value)}
+                        onChange={e => !useSavedDetails && setPhoneNumber(e.target.value)}
+                        readOnly={useSavedDetails}
                         placeholder="+94"
-                        className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm"
+                        className={`w-full px-4 py-3 rounded-lg border border-[var(--color-outline-variant)]/30 outline-none text-sm transition-colors ${
+                          useSavedDetails
+                            ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] cursor-not-allowed'
+                            : 'bg-[var(--color-surface-container-lowest)] focus:ring-2 focus:ring-[var(--color-primary)]/30'
+                        }`}
                     />
                 </div>
               </div>
@@ -159,9 +218,14 @@ export default function CheckoutPage() {
                 <textarea
                     rows="3"
                     value={address}
-                    onChange={e => setAddress(e.target.value)}
+                    onChange={e => !useSavedDetails && setAddress(e.target.value)}
+                    readOnly={useSavedDetails}
                     placeholder="Provide full street address/landmark..."
-                    className="w-full px-4 py-3 rounded-lg bg-[var(--color-surface-container-lowest)] border border-[var(--color-outline-variant)]/30 outline-none focus:ring-2 focus:ring-[var(--color-primary)]/30 text-sm resize-none"
+                    className={`w-full px-4 py-3 rounded-lg border border-[var(--color-outline-variant)]/30 outline-none text-sm resize-none transition-colors ${
+                      useSavedDetails
+                        ? 'bg-[var(--color-surface-container)] text-[var(--color-on-surface-variant)] cursor-not-allowed'
+                        : 'bg-[var(--color-surface-container-lowest)] focus:ring-2 focus:ring-[var(--color-primary)]/30'
+                    }`}
                 ></textarea>
               </div>
 

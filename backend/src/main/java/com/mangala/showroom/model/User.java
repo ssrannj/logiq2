@@ -25,6 +25,10 @@ public class User {
     @Column(nullable = false)
     private Integer points = 15550;
 
+    private String fullName;
+    private String phoneNumber;
+    private String address;
+
     public User() {}
 
     public User(String name, String email, String password, Role role) {
@@ -47,4 +51,10 @@ public class User {
     public void setRole(Role role) { this.role = role; }
     public Integer getPoints() { return points; }
     public void setPoints(Integer points) { this.points = points; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 }
