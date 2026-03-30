@@ -389,7 +389,12 @@ export default function TrackingPage() {
 
   useEffect(() => {
     if (!orderId) {
-      setShowGuestForm(true);
+      if (user) {
+        // Logged-in users: redirect to dashboard which already shows all orders
+        navigate('/dashboard', { replace: true });
+      } else {
+        setShowGuestForm(true);
+      }
       return;
     }
 
@@ -401,11 +406,15 @@ export default function TrackingPage() {
         setShowGuestForm(false);
       })
       .catch(() => {
-        // Authenticated fetch failed — fall back to guest form
-        setShowGuestForm(true);
+        if (user) {
+          // Logged-in user but order load failed — redirect to dashboard
+          navigate('/dashboard', { replace: true });
+        } else {
+          setShowGuestForm(true);
+        }
       })
       .finally(() => setLoading(false));
-  }, [orderId]);
+  }, [orderId, user, navigate]);
 
   return (
     <div className="bg-[var(--color-surface)] text-[var(--color-on-surface)] min-h-screen" style={{ fontFamily: 'Inter' }}>

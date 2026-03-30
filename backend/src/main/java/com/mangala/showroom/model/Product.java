@@ -34,6 +34,9 @@ public class Product {
     @Column
     private Integer warrantyPeriodMonths;
 
+    @Column
+    private String material;
+
     // ---- Constructors ----
 
     public Product() {}
@@ -75,4 +78,7 @@ public class Product {
 
     public Integer getWarrantyPeriodMonths() { return warrantyPeriodMonths; }
     public void setWarrantyPeriodMonths(Integer warrantyPeriodMonths) { this.warrantyPeriodMonths = warrantyPeriodMonths; }
+
+    public String getMaterial() { return material; }
+    public void setMaterial(String material) { this.material = material; }
 }

@@ -66,8 +66,9 @@ public class ProductController {
             String category = (String) body.get("category");
             Integer warrantyPeriodMonths = body.get("warrantyPeriodMonths") != null
                     ? Integer.valueOf(body.get("warrantyPeriodMonths").toString()) : null;
+            String material = (String) body.get("material");
 
-            Product updated = productService.updateProduct(id, name, description, price, quantity, category, warrantyPeriodMonths);
+            Product updated = productService.updateProduct(id, name, description, price, quantity, category, warrantyPeriodMonths, material);
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));

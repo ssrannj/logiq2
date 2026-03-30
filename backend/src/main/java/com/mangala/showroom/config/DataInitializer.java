@@ -1,8 +1,10 @@
 package com.mangala.showroom.config;
 
+import com.mangala.showroom.model.Category;
 import com.mangala.showroom.model.Product;
 import com.mangala.showroom.model.Role;
 import com.mangala.showroom.model.User;
+import com.mangala.showroom.repository.CategoryRepository;
 import com.mangala.showroom.repository.ProductRepository;
 import com.mangala.showroom.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class DataInitializer implements CommandLineRunner {
     private UserRepository userRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private PasswordEncoder encoder;
 
     @Override
@@ -32,6 +37,9 @@ public class DataInitializer implements CommandLineRunner {
         // --- SEED USERS ---
         seedUser("Admin User", "admin@mangala.lk", "admin123", Role.ADMIN);
         seedUser("Test Customer", "customer@mangala.lk", "cust123", Role.CUSTOMER);
+
+        // --- SEED CATEGORIES ---
+        seedCategories();
 
         // --- SEED PRODUCTS ---
         if (productRepository.count() == 0) {
@@ -85,6 +93,25 @@ public class DataInitializer implements CommandLineRunner {
             ));
 
             System.out.println("✅ Mangala Showroom: Seed products and default users sync complete.");
+        }
+    }
+
+    private void seedCategories() {
+        if (categoryRepository.count() == 0) {
+            Category furniture = categoryRepository.save(new Category("Furniture", null));
+            Category elec = categoryRepository.save(new Category("Electronics", null));
+
+            // Furniture sub-categories — names must match product.category values
+            categoryRepository.save(new Category("Living", furniture.getId()));
+            categoryRepository.save(new Category("Bedroom", furniture.getId()));
+            categoryRepository.save(new Category("Kitchen", furniture.getId()));
+
+            // Electronics sub-categories
+            categoryRepository.save(new Category("TVs & Displays", elec.getId()));
+            categoryRepository.save(new Category("Kitchen Appliances", elec.getId()));
+            categoryRepository.save(new Category("Home Audio", elec.getId()));
+
+            System.out.println("✅ Seeded default categories.");
         }
     }
 

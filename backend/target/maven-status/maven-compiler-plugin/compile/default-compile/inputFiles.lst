@@ -2,10 +2,12 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/config/DataInitializer.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/config/WebConfig.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/AuthController.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/CategoryController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/OrderController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/ProductController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/UserController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/WishlistController.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Category.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Order.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/OrderStatus.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Product.java
@@ -19,6 +21,7 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/RegisterRequest.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/UserProfileResponse.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/payload/WarrantyItem.java
+/home/runner/workspace/backend/src/main/java/com/mangala/showroom/repository/CategoryRepository.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/repository/OrderRepository.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/repository/ProductRepository.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/repository/UserRepository.java

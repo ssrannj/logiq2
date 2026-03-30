@@ -17,6 +17,11 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+// ─── Categories ─────────────────────────────────────────────────────────────
+export const getCategories = () => API.get('/api/categories');
+export const addCategory = (data) => API.post('/api/categories/admin', data);
+export const deleteCategory = (id) => API.delete(`/api/categories/admin/${id}`);
+
 // ─── Auth ───────────────────────────────────────────────────────────────────
 export const login = (data) => API.post('/api/auth/login', data);
 export const register = (data) => API.post('/api/auth/register', data);

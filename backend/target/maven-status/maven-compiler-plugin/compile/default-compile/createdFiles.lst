@@ -2,6 +2,7 @@ com/mangala/showroom/payload/LoginRequest.class
 com/mangala/showroom/payload/GuestTrackResponse.class
 com/mangala/showroom/controller/AuthController.class
 com/mangala/showroom/controller/UserController.class
+com/mangala/showroom/repository/CategoryRepository.class
 com/mangala/showroom/model/User.class
 com/mangala/showroom/security/UserDetailsImpl.class
 com/mangala/showroom/security/UserDetailsServiceImpl.class
@@ -19,6 +20,7 @@ com/mangala/showroom/config/WebConfig$1.class
 com/mangala/showroom/payload/RegisterRequest.class
 com/mangala/showroom/service/OrderService.class
 com/mangala/showroom/controller/OrderController$1.class
+com/mangala/showroom/controller/CategoryController.class
 com/mangala/showroom/repository/OrderRepository.class
 com/mangala/showroom/payload/GuestTrackResponse$Milestone.class
 com/mangala/showroom/repository/ProductRepository.class
@@ -28,6 +30,7 @@ com/mangala/showroom/config/WebConfig.class
 com/mangala/showroom/payload/WarrantyItem.class
 com/mangala/showroom/repository/UserRepository.class
 com/mangala/showroom/model/Role.class
+com/mangala/showroom/model/Category.class
 com/mangala/showroom/payload/JwtResponse.class
 com/mangala/showroom/controller/OrderController.class
 com/mangala/showroom/security/JwtUtils.class

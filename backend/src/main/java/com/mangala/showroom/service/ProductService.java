@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, String name, String description, java.math.BigDecimal price,
-                                  Integer quantity, String category, Integer warrantyPeriodMonths) {
+                                  Integer quantity, String category, Integer warrantyPeriodMonths, String material) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
         if (name != null && !name.isBlank()) product.setName(name);
@@ -44,6 +44,13 @@ public class ProductService {
         if (quantity != null) product.setStockCount(quantity);
         if (category != null && !category.isBlank()) product.setCategory(category);
         if (warrantyPeriodMonths != null) product.setWarrantyPeriodMonths(warrantyPeriodMonths);
+        if (material != null) product.setMaterial(material.isBlank() ? null : material);
         return productRepository.save(product);
+    }
+
+    public List<Product> getProductsByMaterial(String material) {
+        return productRepository.findAll().stream()
+                .filter(p -> material.equalsIgnoreCase(p.getMaterial()))
+                .toList();
     }
 }

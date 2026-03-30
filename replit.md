@@ -22,8 +22,8 @@ A full-stack premium furniture and electronics showroom app built with React (Vi
 │   └── vite.config.js  # host: 0.0.0.0, port: 5000, allowedHosts: true, proxy /api -> :8080
 ├── backend/            # Spring Boot app (port 8080)
 │   ├── src/main/java/com/mangala/showroom/
-│   │   ├── controller/ # AuthController, ProductController, OrderController, WishlistController
-│   │   ├── model/      # User, Product, Order, Wishlist, Role, OrderStatus
+│   │   ├── controller/ # AuthController, ProductController, OrderController, WishlistController, CategoryController
+│   │   ├── model/      # User, Product, Order, Wishlist, Role, OrderStatus, Category
 │   │   ├── repository/ # JPA repositories
 │   │   ├── security/   # JWT, Spring Security config
 │   │   ├── service/    # Business logic

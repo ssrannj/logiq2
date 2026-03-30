@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProducts, addProduct, deleteProduct, getAllOrders, updateOrderStatus, updateProduct } from '../services/api';
+import { getProducts, addProduct, deleteProduct, getAllOrders, updateOrderStatus, updateProduct,
+  getCategories, addCategory, deleteCategory } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('overview'); // overview, inventory, orders
+  const [activeTab, setActiveTab] = useState('overview'); // overview, inventory, orders, categories
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
@@ -15,17 +17,23 @@ export default function AdminDashboard() {
 
   // Add Product Form State
   const [newProduct, setNewProduct] = useState({
-    name: '', price: '', stockCount: '', category: 'Living', imageUrl: '', brand: ''
+    name: '', price: '', stockCount: '', category: '', imageUrl: '', brand: '', material: ''
   });
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Edit Product Modal State
   const [editingProduct, setEditingProduct] = useState(null);
   const [editForm, setEditForm] = useState({
-    name: '', description: '', price: '', quantity: '', category: '', warrantyPeriodMonths: ''
+    name: '', description: '', price: '', quantity: '', category: '', warrantyPeriodMonths: '', material: ''
   });
   const [editError, setEditError] = useState('');
   const [editSaving, setEditSaving] = useState(false);
+
+  // Category Management State
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatParentId, setNewCatParentId] = useState('');
+  const [catError, setCatError] = useState('');
+  const [catSaving, setCatSaving] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -36,6 +44,9 @@ export default function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
+      const [catRes] = await Promise.all([getCategories()]);
+      setCategories(catRes.data);
+
       if (activeTab === 'inventory' || activeTab === 'overview') {
         const resP = await getProducts();
         setProducts(resP.data);
@@ -50,15 +61,48 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
+  const subCategories = categories.filter(c => c.parentId !== null);
+  const rootCategories = categories.filter(c => c.parentId === null);
+
+  const handleAddCategory = async (e) => {
+    e.preventDefault();
+    setCatSaving(true);
+    setCatError('');
+    try {
+      const parentId = newCatParentId ? parseInt(newCatParentId) : null;
+      await addCategory({ name: newCatName.trim(), parentId });
+      setNewCatName('');
+      setNewCatParentId('');
+      const catRes = await getCategories();
+      setCategories(catRes.data);
+    } catch (err) {
+      setCatError(err.response?.data?.error || 'Failed to add category.');
+    } finally {
+      setCatSaving(false);
+    }
+  };
+
+  const handleDeleteCategory = async (id) => {
+    if (!window.confirm('Delete this category?')) return;
+    try {
+      await deleteCategory(id);
+      const catRes = await getCategories();
+      setCategories(catRes.data);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to delete category.');
+    }
+  };
+
   const handleAddProduct = async (e) => {
     e.preventDefault();
     try {
       await addProduct({
         ...newProduct,
         price: parseFloat(newProduct.price),
-        stockCount: parseInt(newProduct.stockCount, 10)
+        stockCount: parseInt(newProduct.stockCount, 10),
+        material: newProduct.material || null,
       });
-      setNewProduct({ name: '', price: '', stockCount: '', category: 'Living', imageUrl: '', brand: '' });
+      setNewProduct({ name: '', price: '', stockCount: '', category: '', imageUrl: '', brand: '', material: '' });
       setShowAddModal(false);
       fetchData(); 
     } catch (err) {
@@ -83,9 +127,10 @@ export default function AdminDashboard() {
       description: product.description || '',
       price: product.price !== undefined ? String(product.price) : '',
       quantity: product.stockCount !== undefined ? String(product.stockCount) : '',
-      category: product.category || 'Living',
+      category: product.category || '',
       warrantyPeriodMonths: product.warrantyPeriodMonths !== undefined && product.warrantyPeriodMonths !== null
         ? String(product.warrantyPeriodMonths) : '',
+      material: product.material || '',
     });
     setEditError('');
   };
@@ -102,6 +147,7 @@ export default function AdminDashboard() {
         quantity: editForm.quantity !== '' ? parseInt(editForm.quantity, 10) : null,
         category: editForm.category,
         warrantyPeriodMonths: editForm.warrantyPeriodMonths !== '' ? parseInt(editForm.warrantyPeriodMonths, 10) : null,
+        material: editForm.material || '',
       });
       setEditingProduct(null);
       fetchData();
@@ -159,11 +205,24 @@ export default function AdminDashboard() {
                     onChange={e => setEditForm({ ...editForm, category: e.target.value })}
                     className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
                   >
-                    <option value="Living">Living Room</option>
-                    <option value="Kitchen">Kitchen</option>
-                    <option value="Bedroom">Bedroom</option>
-                    <option value="Electronics">Electronics</option>
+                    <option value="">-- Select Category --</option>
+                    {rootCategories.map(root => (
+                      <optgroup key={root.id} label={root.name}>
+                        {categories.filter(c => c.parentId === root.id).map(sub => (
+                          <option key={sub.id} value={sub.name}>{sub.name}</option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Material</label>
+                  <input
+                    value={editForm.material}
+                    onChange={e => setEditForm({ ...editForm, material: e.target.value })}
+                    className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                    placeholder="e.g. Teak Wood, Velvet Fabric"
+                  />
                 </div>
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Price (LKR)</label>
@@ -272,6 +331,13 @@ export default function AdminDashboard() {
             <span className="material-symbols-outlined text-lg">receipt_long</span>
             <span>Orders</span>
           </button>
+          <button 
+            onClick={() => setActiveTab('categories')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 font-semibold rounded-lg shadow-sm transition-transform duration-200 hover:translate-x-1 ${activeTab === 'categories' ? 'bg-white text-[#005a07] border border-[#e4e2e2]' : 'text-zinc-500 hover:bg-zinc-100'}`}
+          >
+            <span className="material-symbols-outlined text-lg">category</span>
+            <span>Categories</span>
+          </button>
         </nav>
 
         <div className="mt-auto pt-6 border-t border-[#e4e2e2]">
@@ -303,11 +369,13 @@ export default function AdminDashboard() {
               {activeTab === 'overview' && 'Executive Dashboard'}
               {activeTab === 'inventory' && 'Inventory Management'}
               {activeTab === 'orders' && 'Global Orders Tracking'}
+              {activeTab === 'categories' && 'Category Management'}
             </h1>
             <p className="text-[#40493c] font-body mt-2">
               {activeTab === 'overview' && 'Welcome back. Here is what is happening with Mangala Luxe today.'}
               {activeTab === 'inventory' && 'Add, remove, and monitor stock for the global unified catalog.'}
               {activeTab === 'orders' && 'Adjust live lifecycles and confirm slip payments dynamically.'}
+              {activeTab === 'categories' && 'Manage Furniture and Electronics categories and subcategories.'}
             </p>
           </div>
           <div className="flex items-center space-x-4">
@@ -391,12 +459,17 @@ export default function AdminDashboard() {
                   <input required placeholder="Brand / Designer" value={newProduct.brand} onChange={(e) => setNewProduct({...newProduct, brand: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm" />
                   <input required type="number" step="0.01" placeholder="Price (LKR)" value={newProduct.price} onChange={(e) => setNewProduct({...newProduct, price: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm" />
                   <input required type="number" placeholder="Physical Stock" value={newProduct.stockCount} onChange={(e) => setNewProduct({...newProduct, stockCount: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm" />
-                  <select value={newProduct.category} onChange={(e) => setNewProduct({...newProduct, category: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm">
-                    <option value="Living">Living Room</option>
-                    <option value="Kitchen">Kitchen</option>
-                    <option value="Bedroom">Bedroom</option>
-                    <option value="Electronics">Electronics</option>
+                  <select required value={newProduct.category} onChange={(e) => setNewProduct({...newProduct, category: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm">
+                    <option value="">-- Select Category --</option>
+                    {rootCategories.map(root => (
+                      <optgroup key={root.id} label={root.name}>
+                        {categories.filter(c => c.parentId === root.id).map(sub => (
+                          <option key={sub.id} value={sub.name}>{sub.name}</option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
+                  <input placeholder="Material (e.g. Teak Wood)" value={newProduct.material} onChange={(e) => setNewProduct({...newProduct, material: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm" />
                   <input required placeholder="High-Res Image URL (https://...)" value={newProduct.imageUrl} onChange={(e) => setNewProduct({...newProduct, imageUrl: e.target.value})} className="bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 border-transparent focus:ring-[#005a07] text-sm" />
                   
                   <div className="md:col-span-2 pt-2">
@@ -525,6 +598,107 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* ─── CATEGORIES TAB ─────────────────────────────────────── */}
+        {activeTab === 'categories' && (
+          <div className="animate-in fade-in duration-500 space-y-8">
+            {/* Add Category Form */}
+            <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#005a07]/20 border-t-4 border-t-[#005a07]">
+              <h2 className="text-lg font-bold text-[#005a07] font-headline mb-6">Add New Category</h2>
+              <form onSubmit={handleAddCategory} className="flex flex-col md:flex-row gap-4 items-end">
+                <div className="flex-1 space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Category Name</label>
+                  <input
+                    required
+                    value={newCatName}
+                    onChange={e => setNewCatName(e.target.value)}
+                    placeholder="e.g. Office Furniture, Speakers"
+                    className="w-full bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                  />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b]">Parent Category (optional)</label>
+                  <select
+                    value={newCatParentId}
+                    onChange={e => setNewCatParentId(e.target.value)}
+                    className="w-full bg-[#f5f3f3] px-4 py-3 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm"
+                  >
+                    <option value="">— Root Category —</option>
+                    {rootCategories.map(r => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  disabled={catSaving}
+                  className="bg-[#005a07] hover:bg-[#1d741b] text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow disabled:opacity-60 flex items-center gap-2 shrink-0"
+                >
+                  {catSaving ? (
+                    <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Adding…</>
+                  ) : (
+                    <><span className="material-symbols-outlined text-base">add</span> Add Category</>
+                  )}
+                </button>
+              </form>
+              {catError && <p className="mt-3 text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{catError}</p>}
+            </div>
+
+            {/* Category Tree */}
+            <div className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#e4e2e2]">
+              <div className="p-6 border-b border-[#f0eded]">
+                <h4 className="font-headline text-lg font-bold tracking-tight">Category Hierarchy</h4>
+                <p className="text-xs text-[#707a6b] mt-1">Products are assigned to sub-categories. Main categories group them for browsing.</p>
+              </div>
+              <div className="p-6 space-y-6">
+                {rootCategories.map(root => {
+                  const children = categories.filter(c => c.parentId === root.id);
+                  return (
+                    <div key={root.id} className="border border-[#e4e2e2] rounded-xl overflow-hidden">
+                      <div className="flex items-center justify-between px-6 py-4 bg-[#f5f3f3]">
+                        <div className="flex items-center gap-3">
+                          <span className="material-symbols-outlined text-[#005a07] text-xl">
+                            {root.name === 'Furniture' ? 'weekend' : 'devices'}
+                          </span>
+                          <div>
+                            <p className="font-bold font-headline text-[#1b1c1c]">{root.name}</p>
+                            <p className="text-[10px] text-[#707a6b] uppercase tracking-widest">Root Category · {children.length} subcategories</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteCategory(root.id)}
+                          className="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg transition-colors"
+                          title="Delete root (only if no subcategories)"
+                        >
+                          <span className="material-symbols-outlined text-sm">delete</span>
+                        </button>
+                      </div>
+                      {children.length > 0 && (
+                        <div className="divide-y divide-[#f0eded]">
+                          {children.map(sub => (
+                            <div key={sub.id} className="flex items-center justify-between px-8 py-3 hover:bg-[#fafafa] group transition-colors">
+                              <div className="flex items-center gap-3">
+                                <span className="material-symbols-outlined text-[#c4c8c0] text-base">subdirectory_arrow_right</span>
+                                <p className="text-sm font-medium text-[#40493c]">{sub.name}</p>
+                              </div>
+                              <button
+                                onClick={() => handleDeleteCategory(sub.id)}
+                                className="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 bg-red-50 p-1.5 rounded-lg transition-all"
+                                title="Delete subcategory"
+                              >
+                                <span className="material-symbols-outlined text-sm">delete</span>
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         )}
