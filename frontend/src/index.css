@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@theme {
+  /* Mangala Showroom Design Tokens */
+  --color-primary: #005a07;
+  --color-primary-container: #1d741b;
+  --color-primary-fixed: #9ff88e;
+  --color-primary-fixed-dim: #83db75;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #002201;
+  --color-on-primary-container: #9ef88e;
+  --color-inverse-primary: #83db75;
+
+  --color-secondary: #686000;
+  --color-secondary-container: #f6e63e;
+  --color-secondary-fixed: #f6e63e;
+  --color-secondary-fixed-dim: #d9c91e;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #6e6600;
+  --color-on-secondary-fixed: #1f1c00;
+  --color-on-secondary-fixed-variant: #4e4800;
+
+  --color-tertiary: #005463;
+  --color-tertiary-container: #006e81;
+  --color-tertiary-fixed: #abedff;
+  --color-tertiary-fixed-dim: #7ed3e8;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #a8ecff;
+  --color-on-tertiary-fixed: #001f26;
+  --color-on-tertiary-fixed-variant: #004e5c;
+
+  --color-surface: #fbf9f8;
+  --color-surface-dim: #dbd9d9;
+  --color-surface-bright: #fbf9f8;
+  --color-surface-variant: #e4e2e2;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f3f3;
+  --color-surface-container: #f0eded;
+  --color-surface-container-high: #eae8e7;
+  --color-surface-container-highest: #e4e2e2;
+  --color-surface-tint: #146e15;
+  --color-on-surface: #1b1c1c;
+  --color-on-surface-variant: #40493c;
+  --color-inverse-surface: #303030;
+  --color-inverse-on-surface: #f2f0f0;
+
+  --color-outline: #707a6b;
+  --color-outline-variant: #bfcab8;
+
+  --color-background: #fbf9f8;
+  --color-on-background: #1b1c1c;
+
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error: #ffffff;
+  --color-on-error-container: #93000a;
+
+  /* Typography */
+  --font-headline: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Plus Jakarta Sans', sans-serif;
+
+  /* Border Radius */
+  --radius: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
+}
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+/* ===== Custom Utility Classes ===== */
+
+.glass-header {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(251, 249, 248, 0.7);
+}
+
+.primary-gradient {
+  background: linear-gradient(135deg, #005a07 0%, #1d741b 100%);
+}
+
+.ghost-border {
+  border: 1px solid rgba(191, 202, 184, 0.15);
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar custom styles */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f5f3f3; }
+::-webkit-scrollbar-thumb { background: #bfcab8; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #707a6b; }
+
+/* Body base */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Toast animation */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.toast-slide-in { animation: slideIn 0.3s ease-out; }
+
+/* Step connector animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.4s ease-out forwards; }

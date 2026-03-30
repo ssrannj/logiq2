@@ -1,0 +1,327 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Mangala Showroom | Premium Furniture &amp; Electronics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed": "#9ff88e",
+              "primary-container": "#1d741b",
+              "outline": "#707a6b",
+              "primary-fixed-dim": "#83db75",
+              "on-tertiary-fixed": "#001f26",
+              "outline-variant": "#bfcab8",
+              "error": "#ba1a1a",
+              "on-primary-fixed": "#002201",
+              "tertiary-fixed": "#abedff",
+              "background": "#fbf9f8",
+              "on-secondary-container": "#6e6600",
+              "on-primary-fixed-variant": "#005306",
+              "on-error-container": "#93000a",
+              "surface-container-low": "#f5f3f3",
+              "surface-container": "#f0eded",
+              "on-surface": "#1b1c1c",
+              "on-secondary-fixed": "#1f1c00",
+              "surface-variant": "#e4e2e2",
+              "on-tertiary-fixed-variant": "#004e5c",
+              "on-tertiary": "#ffffff",
+              "surface-dim": "#dbd9d9",
+              "on-tertiary-container": "#a8ecff",
+              "on-background": "#1b1c1c",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#eae8e7",
+              "tertiary": "#005463",
+              "inverse-surface": "#303030",
+              "on-secondary": "#ffffff",
+              "primary": "#005a07",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff",
+              "secondary-container": "#f6e63e",
+              "surface-tint": "#146e15",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f2f0f0",
+              "tertiary-fixed-dim": "#7ed3e8",
+              "secondary-fixed": "#f6e63e",
+              "on-secondary-fixed-variant": "#4e4800",
+              "surface": "#fbf9f8",
+              "on-primary-container": "#9ef88e",
+              "secondary": "#686000",
+              "surface-container-highest": "#e4e2e2",
+              "secondary-fixed-dim": "#d9c91e",
+              "inverse-primary": "#83db75",
+              "on-surface-variant": "#40493c",
+              "tertiary-container": "#006e81",
+              "surface-bright": "#fbf9f8"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #005a07 0%, #1d741b 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border {
+            border: 1px solid rgba(191, 202, 184, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 glass-header bg-white/70 dark:bg-zinc-900/70">
+<nav class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<a class="text-2xl font-bold tracking-tighter text-green-900 dark:text-green-50 font-headline" href="#" style="">
+                    Mangala Showroom
+                </a>
+<div class="hidden md:flex gap-6 items-center font-plus-jakarta-sans text-sm tracking-wide">
+<a class="text-green-900 dark:text-green-50 font-bold border-b-2 border-green-800 py-1 transition-all" href="#" style="">Furniture</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-800 transition-colors py-1" href="#" style="">Electronics</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-800 transition-colors py-1" href="#" style="">Wishlist</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex items-center bg-surface-container-high px-4 py-2 rounded-lg">
+<span class="material-symbols-outlined text-outline text-sm mr-2" style="">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 font-body" placeholder="Search curated pieces..." type="text">
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:opacity-80 transition-all scale-95 active:scale-100 duration-200" style="">
+<span class="material-symbols-outlined text-green-900 dark:text-green-500" style="">person</span>
+</button>
+<button class="hover:opacity-80 transition-all scale-95 active:scale-100 duration-200 relative" style="">
+<span class="material-symbols-outlined text-green-900 dark:text-green-500" style="">shopping_cart</span>
+<span class="absolute -top-1 -right-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold px-1 rounded-full" style="">2</span>
+</button>
+</div>
+</div>
+</nav>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[921px] w-full overflow-hidden">
+<div class="absolute inset-0 grid grid-cols-1 md:grid-cols-2">
+<div class="relative group overflow-hidden">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Luxurious living room with hand-crafted Sri Lankan teak sofa, minimalist coffee table, and warm sunlight filtering through linen curtains" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc_dtPJlPNfoAyTEuyq1zYk4h95SX3ke9NtSe71V4V06VHYgnoFKS5spJD7SpC64tM-dlRSruRDZ2BIEutDKLegjUHZQZ0Sv70ymhAmFWT3VgmmjMviPfXv8terR1NdVpe3IPGToF-L9t3t88Ss1Tscm6JHG0-YyJHQMSmDE0p-RV0oiXiiphIm5VrIkPzTj9oZYGL5St68kgvObuMC8DUeVTGbL5N0UPSBiVs9z2SUNZvercV3Viuc2Ra22r6Pux1dKkwWKWVhoA" style="">
+<div class="absolute inset-0 bg-black/20 flex flex-col justify-end p-12">
+<span class="text-white/80 font-headline uppercase tracking-[0.3em] text-xs mb-4" style="">The Heritage Collection</span>
+<h1 class="text-white text-5xl font-headline font-extrabold mb-6 leading-tight" style="">Authentic Teak Artistry</h1>
+<a class="w-fit primary-gradient text-on-primary px-8 py-3 rounded-lg font-headline font-bold text-sm tracking-wide shadow-xl" href="#" style="">Explore Furniture</a>
+</div>
+</div>
+<div class="relative group overflow-hidden border-l border-white/10">
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Sleek ultra-high-definition smart TV on a minimalist floating console in a dark modern studio environment with ambient neon backlighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtdYGvMdamhHvNmSDKepYTst37aSp9pm6Vo5b2atTI-dqSyFx1YmEJE6S0Sjunu9lUjvyQrXNZbAuK1MTrXRIMyETKLB4VHyg9rKVVbjmlK0pYzZ80mJ-nl7X5lq1GriV76K6ykvxG8Crm8sQ_W-G_4xOD9Kg0L5kdG41zdudpfN-VShjzecPVcx3svDwIF4_VFMPcNOfhkPMcPQJwFeWmyWgHi9LaOwQ3QVXUy4XWu8DIS3Gh9cGBAieZ9g-5XDUqnqOque2fAXQ" style="">
+<div class="absolute inset-0 bg-black/40 flex flex-col justify-end p-12">
+<span class="text-white/80 font-headline uppercase tracking-[0.3em] text-xs mb-4" style="">The Tech Pavilion</span>
+<h2 class="text-white text-5xl font-headline font-extrabold mb-6 leading-tight" style="">Next-Gen Intelligence</h2>
+<a class="w-fit bg-surface-container-lowest text-primary px-8 py-3 rounded-lg font-headline font-bold text-sm tracking-wide shadow-xl" href="#" style="">Shop Electronics</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Grid Section -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24 bg-surface">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h2 class="text-4xl font-headline font-bold text-on-surface tracking-tighter mb-4" style="">Curated Selections</h2>
+<p class="text-outline font-body max-w-md" style="">Each piece in our showroom is selected for its architectural integrity and functional excellence.</p>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 rounded-full border border-outline-variant text-xs font-headline font-bold tracking-widest uppercase hover:bg-surface-container transition-all" style="">All</button>
+<button class="px-6 py-2 rounded-full text-xs font-headline font-bold tracking-widest uppercase text-outline hover:text-primary transition-all" style="">Living</button>
+<button class="px-6 py-2 rounded-full text-xs font-headline font-bold tracking-widest uppercase text-outline hover:text-primary transition-all" style="">Kitchen</button>
+<button class="px-6 py-2 rounded-full text-xs font-headline font-bold tracking-widest uppercase text-outline hover:text-primary transition-all" style="">Smart Home</button>
+</div>
+</div>
+<!-- Bento-Style Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Product Card 1: Teak Sofa -->
+<div class="group bg-surface-container-lowest transition-all hover:shadow-[0_40px_40px_-4px_rgba(0,90,7,0.05)] rounded-lg overflow-hidden flex flex-col">
+<div class="aspect-[4/5] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Close-up of a premium teak wood sofa frame with cream-colored linen cushions in a brightly lit showroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3I96KhhUs8CfI8v8atd4H_vu_bo9BTN60gtBkt9clNtPOzHz5Q6UW7VqK4GZ8ilNeYUZ09WE8t--lIBGnCv6Hr8QKKetJqI4OrqDvqIrj63z0PpZ7rexCRbrbCPiGW64yjw53_2Ihi2VZcTHgCBB12vBEZJsxCy4tFbIjIT0WZLvddpxoEtkQ8d2ed6GEaDkc2Zwjgv4yS4y8zwCPTh2x0WSCjG2lYATlnTnZbwPwVum_rAvxAgi2pJ-zvFvf4TiPm3oavfzkiB4" style="">
+<div class="absolute top-4 left-4 bg-secondary-container text-on-secondary-container px-3 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full" style="">New Arrival</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="font-headline font-bold text-lg mb-1" style="">Sri Lankan Teak Grand Sofa</h3>
+<p class="text-outline text-xs font-body mb-4 uppercase tracking-tighter" style="">Living Room • Handcrafted</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline font-extrabold text-primary" style="">Rs. 185,000.00</span>
+<button class="primary-gradient text-on-primary p-2 rounded-lg scale-95 active:scale-100 transition-all" style="">
+<span class="material-symbols-outlined text-sm" style="">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2: Smart TV (Out of stock) -->
+<div class="group bg-surface-container-lowest transition-all hover:shadow-[0_40px_40px_-4px_rgba(0,90,7,0.05)] rounded-lg overflow-hidden flex flex-col">
+<div class="aspect-[4/5] overflow-hidden relative">
+<img class="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" data-alt="Modern 65-inch OLED smart TV displaying vibrant colors against a dark charcoal feature wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6OsbEFpa9YRUc4SNuLnJ1tYOF5PGSpVI3sD2pshEjVZKCyqY46fO_HpBhEYn2fbH0HrRAvx_NjUGiiJYIMCmeWNsSpxKCt278q4qbH3DunJD7fpDyQhvnfSMDIM5gJHfp8yimSjn964FrnQs9j4WuHoJVbIDHqeShY9ys9RwQKxVGZfQHRXRDGsU4eAsZcbnDxPbG2Mnzp_IP8AaWbTQN_XBe4vQnPd4JFGNWFMekDoz3OHYXwZ-wK1ZQVSJ6Vn0AsutCi4ix8ck" style="">
+<div class="absolute inset-0 bg-white/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="bg-on-surface text-surface text-[10px] font-bold uppercase px-4 py-1" style="">Limited Stock</span>
+</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="font-headline font-bold text-lg mb-1" style="">UltraThin 4K Quantum LED</h3>
+<p class="text-outline text-xs font-body mb-4 uppercase tracking-tighter" style="">Electronics • 65" Display</p>
+<div class="mt-auto flex flex-col gap-3">
+<span class="font-headline font-extrabold text-outline line-through opacity-50" style="">Rs. 345,000.00</span>
+<button class="w-full border border-outline text-outline py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-outline hover:text-surface transition-all" style="">Notify Me</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3: Dining Table -->
+<div class="group bg-surface-container-lowest transition-all hover:shadow-[0_40px_40px_-4px_rgba(0,90,7,0.05)] rounded-lg overflow-hidden flex flex-col">
+<div class="aspect-[4/5] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Minimalist solid wood dining table for six people with architectural black metal legs on a light gray concrete floor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJL3lz7h-JRUgbGu7ae55NTzxNe-a_Fm0AjIW_wiXs4lfOi0rp44AIJNcwMQdr1j-xzZklveNy2vdTxwCi4jSNbB745dtUhrmfqCy11X5-0XJ7aK8wNVpoVTBNdbwVmdksDzpgVLK5iCMTETpVj_yUY_-C-9URvbi099j0rqoOKaNyfSEpy74f7zm7pb5cGEG-FcJDYMMX5WndtMpRSLHtw6p4rueTEfX-Dyb_FDj5iD_gQIjF2N0twMtD1LBboM-uRRc4X8sRjWY" style="">
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="font-headline font-bold text-lg mb-1" style="">Nordic Trestle Dining Table</h3>
+<p class="text-outline text-xs font-body mb-4 uppercase tracking-tighter" style="">Kitchen • Solid Oak</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline font-extrabold text-primary" style="">Rs. 120,500.00</span>
+<button class="primary-gradient text-on-primary p-2 rounded-lg scale-95 active:scale-100 transition-all" style="">
+<span class="material-symbols-outlined text-sm" style="">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 4: Refrigerator -->
+<div class="group bg-surface-container-lowest transition-all hover:shadow-[0_40px_40px_-4px_rgba(0,90,7,0.05)] rounded-lg overflow-hidden flex flex-col">
+<div class="aspect-[4/5] overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="High-end double door stainless steel refrigerator in a modern kitchen with marble countertops" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO7SMhZ6inVZJehkAznTr85q33ZEaa1pcfnHRFXDi-pbeJCQ7eScF3Yc4Z1lnYP9Yb67ZW810Wh-boSHCMovsmYhPkdQMuWPAI6DpRWlW2PbKZP0twbTM2DGlo54NohjtYkA430hxqHOLw86g2-uCdbXix2WRIKnMSb2G19sILkMjn1CBB098kaFfSOrRnfwHHZADJ5tgKLYLFlyWuimFP4p0oIyjJSAxDDichWLd2Iguk53ynvk70NspPgPgLsv7Ad_cIAJLzHtM" style="">
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<h3 class="font-headline font-bold text-lg mb-1" style="">Direct-Cool Double Door</h3>
+<p class="text-outline text-xs font-body mb-4 uppercase tracking-tighter" style="">Electronics • Energy Saver</p>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-headline font-extrabold text-primary" style="">Rs. 256,900.00</span>
+<button class="primary-gradient text-on-primary p-2 rounded-lg scale-95 active:scale-100 transition-all" style="">
+<span class="material-symbols-outlined text-sm" style="">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Mangala Process -->
+<section class="py-24 bg-surface-container-low overflow-hidden">
+<div class="max-w-screen-2xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+<div class="relative">
+<div class="absolute -top-12 -left-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+<h2 class="text-5xl font-headline font-extrabold text-on-surface leading-tight mb-8" style="">Crafting Comfort <br>Through Generations.</h2>
+<div class="space-y-12 relative">
+<div class="absolute left-4 top-2 bottom-2 w-[1px] bg-outline-variant/30"></div>
+<div class="flex gap-8 relative">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0 z-10 border-4 border-surface-container-low">
+<span class="text-white text-[10px] font-bold" style="">01</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg mb-2" style="">Sustainable Sourcing</h4>
+<p class="text-outline text-sm leading-relaxed max-w-sm" style="">We exclusively use plantation-grown timber, ensuring every piece of furniture preserves Sri Lanka's natural beauty.</p>
+</div>
+</div>
+<div class="flex gap-8 relative">
+<div class="w-8 h-8 rounded-full border border-outline bg-surface-container-low flex items-center justify-center shrink-0 z-10 border-4">
+<span class="text-outline text-[10px] font-bold" style="">02</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg mb-2" style="">Precision Engineering</h4>
+<p class="text-outline text-sm leading-relaxed max-w-sm" style="">Our electronics partnership with global leaders ensures you get the latest tech with local warranty support.</p>
+</div>
+</div>
+<div class="flex gap-8 relative">
+<div class="w-8 h-8 rounded-full border border-outline bg-surface-container-low flex items-center justify-center shrink-0 z-10 border-4">
+<span class="text-outline text-[10px] font-bold" style="">03</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg mb-2" style="">White-Glove Delivery</h4>
+<p class="text-outline text-sm leading-relaxed max-w-sm" style="">Stress-free installation and setup by our specialized technicians across the island.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+<img class="w-full h-full object-cover" data-alt="Artisans meticulously hand-sanding a large wooden dining table in a sun-drenched workshop with wood shavings on the floor" src="https://metroplastic.in/uploads/2025/12/which-country-is-the-largest-producer-of-furniture-india-leads-global-output.webp" style="">
+</div>
+</div>
+</section>
+<!-- Call to Action -->
+<section class="max-w-screen-2xl mx-auto px-8 py-24">
+<div class="primary-gradient rounded-xl p-16 text-center text-on-primary">
+<span class="text-primary-fixed font-headline uppercase tracking-[0.4em] text-xs mb-6 block" style="">Direct from Showroom</span>
+<h2 class="text-4xl md:text-6xl font-headline font-extrabold mb-8" style="">Bring Modern Elegance Home.</h2>
+<div class="flex justify-center gap-6">
+<button class="bg-surface-container-lowest text-primary px-10 py-4 rounded-lg font-headline font-bold text-sm tracking-widest uppercase hover:opacity-90 transition-all" style="">Book a Consultation</button>
+<button class="border border-primary-fixed/30 px-10 py-4 rounded-lg font-headline font-bold text-sm tracking-widest uppercase hover:bg-primary-fixed/10 transition-all" style="">Store Locator</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 max-w-7xl mx-auto">
+<div class="space-y-6">
+<div class="text-lg font-bold text-zinc-900 dark:text-zinc-100 font-headline" style="">Mangala Showroom</div>
+<p class="text-zinc-500 font-inter text-xs leading-relaxed" style="">Defining the standard of Sri Lankan lifestyle since 1988. From masterfully crafted wood to state-of-the-art tech.</p>
+</div>
+<div class="space-y-4">
+<h5 class="font-inter text-xs uppercase tracking-widest text-green-900 dark:text-green-500 font-bold" style="">Quick Links</h5>
+<ul class="space-y-3 font-inter text-xs uppercase tracking-widest">
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">New Arrivals</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Clearance Sale</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Warranty Info</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Store Locator</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="font-inter text-xs uppercase tracking-widest text-green-900 dark:text-green-500 font-bold" style="">Support</h5>
+<ul class="space-y-3 font-inter text-xs uppercase tracking-widest">
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Contact Us</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Privacy Policy</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Terms of Service</a></li>
+<li class="" style=""><a class="text-zinc-500 hover:text-green-700 hover:underline transition-all" href="#" style="">Careers</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="font-inter text-xs uppercase tracking-widest text-green-900 dark:text-green-500 font-bold" style="">Visit Us</h5>
+<p class="text-zinc-500 font-inter text-xs leading-relaxed" style="">
+                    142 Galle Road, <br>
+                    Colombo 03, Sri Lanka.<br>
+                    Mon - Sat: 9:00 AM - 8:00 PM
+                </p>
+<div class="flex gap-4 pt-2">
+<span class="material-symbols-outlined text-zinc-400 cursor-pointer hover:text-primary transition-colors" style="">social_leaderboard</span>
+<span class="material-symbols-outlined text-zinc-400 cursor-pointer hover:text-primary transition-colors" style="">public</span>
+<span class="material-symbols-outlined text-zinc-400 cursor-pointer hover:text-primary transition-colors" style="">alternate_email</span>
+</div>
+</div>
+</div>
+<div class="mt-12 pt-8 border-t border-zinc-200/50 dark:border-zinc-800/50 text-center">
+<p class="font-inter text-[10px] uppercase tracking-[0.2em] text-zinc-400" style="">© 2024 Mangala Showroom. All Rights Reserved. Sri Lanka.</p>
+</div>
+</footer>
+<!-- FAB -->
+<button class="fixed bottom-8 right-8 w-14 h-14 primary-gradient text-on-primary rounded-full shadow-2xl flex items-center justify-center z-50 group hover:scale-110 transition-transform" style="">
+<span class="material-symbols-outlined group-hover:rotate-12 transition-transform" style="">support_agent</span>
+</button>
+</body></html>

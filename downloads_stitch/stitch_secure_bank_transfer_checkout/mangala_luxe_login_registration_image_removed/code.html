@@ -1,0 +1,184 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#a8ecff",
+              "on-secondary-fixed-variant": "#4e4800",
+              "tertiary-container": "#006e81",
+              "inverse-primary": "#83db75",
+              "tertiary-fixed": "#abedff",
+              "tertiary": "#005463",
+              "primary-fixed": "#9ff88e",
+              "on-primary-fixed-variant": "#005306",
+              "surface-container-low": "#f5f3f3",
+              "secondary-fixed": "#f6e63e",
+              "on-tertiary-fixed": "#001f26",
+              "surface-container-highest": "#e4e2e2",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#9ef88e",
+              "error-container": "#ffdad6",
+              "surface-dim": "#dbd9d9",
+              "primary-container": "#1d741b",
+              "on-secondary-container": "#6e6600",
+              "on-background": "#1b1c1c",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "surface-bright": "#fbf9f8",
+              "on-tertiary-fixed-variant": "#004e5c",
+              "inverse-surface": "#303030",
+              "surface-container-high": "#eae8e7",
+              "on-primary-fixed": "#002201",
+              "on-surface-variant": "#40493c",
+              "secondary-container": "#f6e63e",
+              "inverse-on-surface": "#f2f0f0",
+              "primary-fixed-dim": "#83db75",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#1b1c1c",
+              "tertiary-fixed-dim": "#7ed3e8",
+              "primary": "#005a07",
+              "on-secondary": "#ffffff",
+              "surface-container": "#f0eded",
+              "surface-container-lowest": "#ffffff",
+              "outline-variant": "#bfcab8",
+              "outline": "#707a6b",
+              "surface-variant": "#e4e2e2",
+              "surface-tint": "#146e15",
+              "on-error": "#ffffff",
+              "secondary-fixed-dim": "#d9c91e",
+              "surface": "#fbf9f8",
+              "on-secondary-fixed": "#1f1c00",
+              "background": "#fbf9f8",
+              "secondary": "#686000"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Inter"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-header {
+            background: rgba(251, 249, 248, 0.7);
+            backdrop-filter: blur(20px);
+        }
+        .primary-gradient-btn {
+            background: linear-gradient(135deg, #005a07 0%, #1d741b 100%);
+        }
+        .form-input-focus:focus {
+            outline: none;
+            border-bottom: 2px solid #005a07;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-hidden">
+<!-- TopNavBar (Shared Component Logic - Suppression applied if Transactional, but Login requires Brand Identity) -->
+<header class="fixed top-0 w-full z-50 glass-header">
+<div class="flex justify-between items-center px-8 py-6 max-w-full">
+<div class="flex items-center gap-3">
+<span class="font-headline text-2xl font-bold tracking-tighter text-primary" style="">MANGALA&nbsp; SHOWROOM<br></span>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-headline text-sm font-medium text-zinc-600 hover:text-primary transition-colors" href="#" style="">Collections</a>
+<a class="font-headline text-sm font-medium text-zinc-600 hover:text-primary transition-colors" href="#" style="">Electronics</a>
+<a class="font-headline text-sm font-medium text-zinc-600 hover:text-primary transition-colors" href="#" style="">Showrooms</a>
+<div class="h-4 w-px bg-outline-variant/30 mx-2"></div>
+<button class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-all p-2" style="">shopping_bag</button>
+</div>
+</div>
+</header>
+<main class="min-h-screen flex">
+<!-- Left Side: Editorial Image -->
+<section class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover" data-alt="luxury modern living room with floor-to-ceiling windows, sculptural furniture pieces, velvet emerald green sofa, and soft architectural lighting at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCx_4WBC8o5g5iEAvEFtGKEXIhbiKqSagJYId2bJ3jJejJ0CnALoPWsaGexqjERe570n-gLEgtinMEOXGAES6bsTA4QP26pqlMXWFllaMXdbbCl5YpF1txROuXbuUfL8GmnUcXtsDKLDDflIP0-vDhQYwpIaOonUaJOpB6EEVNkgchfcZS3iwsxLUac9srqAbOKTPCoddmWUXVow09YDChfBA_5edDPukWvW24LQoZrMWociBjxMffrBNRE2bNJ7_oCWrrUYSlnts8" style="">
+<div class="absolute bottom-12 left-12 z-20 max-w-md">
+<p class="font-headline text-on-primary text-xs uppercase tracking-[0.3em] mb-4" style="">The Gallery Experience</p>
+<h1 class="font-headline text-4xl font-extrabold text-on-primary leading-tight mb-6" style="">Curating elegance for your digital sanctuary.</h1>
+<div class="flex items-center gap-4">
+<div class="h-px w-12 bg-on-primary/50"></div>
+<p class="text-on-primary/80 text-sm italic" style="">Exclusive access to bespoke collections</p>
+</div>
+</div>
+</section>
+<!-- Right Side: Login Form -->
+<section class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-surface">
+<div class="w-full max-w-md space-y-12">
+<div class="space-y-4">
+<h2 class="font-headline text-3xl font-bold text-on-surface tracking-tight" style="">Welcome back</h2>
+<p class="text-on-surface-variant leading-relaxed" style="">Please enter your details to access your curated showroom dashboard.</p>
+</div>
+<!-- Toggle Switch for Sign Up -->
+<div class="bg-surface-container-low p-1 rounded-full flex w-full">
+<button class="flex-1 py-2 text-sm font-headline font-semibold bg-white rounded-full shadow-sm text-primary transition-all" style="">Sign In</button>
+<button class="flex-1 py-2 text-sm font-headline font-medium text-on-surface-variant hover:text-primary transition-all" style="">Sign Up</button>
+</div>
+<form class="space-y-8">
+<div class="space-y-6">
+<div class="relative group">
+<label class="block text-xs font-headline font-bold uppercase tracking-wider text-on-surface-variant mb-2 transition-colors group-focus-within:text-primary" for="email" style="">Email Address</label>
+<input class="w-full bg-surface-container-low border-b border-outline-variant/30 py-4 px-0 text-on-surface placeholder:text-outline/50 focus:ring-0 focus:border-primary transition-all bg-transparent" id="email" placeholder="alexander@gallery.com" type="email">
+</div>
+<div class="relative group">
+<div class="flex justify-between items-center mb-2">
+<label class="block text-xs font-headline font-bold uppercase tracking-wider text-on-surface-variant transition-colors group-focus-within:text-primary" for="password" style="">Password</label>
+<a class="text-[10px] font-headline font-bold uppercase tracking-tighter text-outline hover:text-primary transition-colors" href="#" style="">Forgot?</a>
+</div>
+<input class="w-full bg-surface-container-low border-b border-outline-variant/30 py-4 px-0 text-on-surface placeholder:text-outline/50 focus:ring-0 focus:border-primary transition-all bg-transparent" id="password" placeholder="••••••••••••" type="password">
+</div>
+</div>
+<div class="flex items-center gap-3">
+<input class="w-4 h-4 rounded-sm border-outline-variant text-primary focus:ring-primary/20" id="remember" type="checkbox">
+<label class="text-sm text-on-surface-variant" for="remember" style="">Remember me for 30 days</label>
+</div>
+<button class="w-full primary-gradient-btn text-on-primary font-headline font-bold py-5 rounded-lg shadow-xl shadow-primary/10 active:scale-[0.98] transition-all" type="submit" style="">
+                        Access Showroom
+                    </button>
+</form>
+<div class="relative py-4">
+<div class="absolute inset-0 flex items-center"><div class="w-full border-t border-outline-variant/20"></div></div>
+<div class="relative flex justify-center text-xs uppercase tracking-widest text-outline bg-surface px-4 font-headline font-medium" style="">Or continue with</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="flex items-center justify-center gap-3 py-4 border border-outline-variant/30 rounded-lg hover:bg-surface-container-low transition-all" style="">
+<span class="material-symbols-outlined text-lg" style="">brand_awareness</span>
+<span class="text-sm font-headline font-semibold" style="">Google</span>
+</button>
+<button class="flex items-center justify-center gap-3 py-4 border border-outline-variant/30 rounded-lg hover:bg-surface-container-low transition-all" style="">
+<span class="material-symbols-outlined text-lg" style="">terminal</span>
+<span class="text-sm font-headline font-semibold" style="">Apple</span>
+</button>
+</div>
+<p class="text-center text-xs text-on-surface-variant/60 font-medium" style="">
+                    New pieces arriving daily. 
+                    <a class="text-primary font-bold hover:underline decoration-2 underline-offset-4 ml-1" href="#" style="">Explore our Collections</a>
+</p>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="fixed bottom-0 w-full z-50 py-6 bg-transparent pointer-events-none">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 pointer-events-auto">
+<div class="text-[10px] font-headline tracking-widest text-zinc-400 uppercase" style="">
+                © 2024 Mangala Luxe Gallery. All Rights Reserved.
+            </div>
+<div class="flex gap-8 items-center mt-4 md:mt-0">
+<a class="text-[10px] font-headline tracking-widest text-zinc-500 hover:text-primary transition-colors uppercase" href="#" style="">Privacy Policy</a>
+<a class="text-[10px] font-headline tracking-widest text-zinc-500 hover:text-primary transition-colors uppercase" href="#" style="">Terms of Service</a>
+<a class="text-[10px] font-headline tracking-widest text-zinc-500 hover:text-primary transition-colors uppercase" href="#" style="">Contact Us</a>
+</div>
+</div>
+</footer>
+</body></html>

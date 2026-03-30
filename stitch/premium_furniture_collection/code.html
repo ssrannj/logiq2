@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Furniture Collection | Mangala Showroom</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#9ff88e",
+                        "primary-container": "#1d741b",
+                        "outline": "#707a6b",
+                        "primary-fixed-dim": "#83db75",
+                        "on-tertiary-fixed": "#001f26",
+                        "outline-variant": "#bfcab8",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#002201",
+                        "tertiary-fixed": "#abedff",
+                        "background": "#fbf9f8",
+                        "on-secondary-container": "#6e6600",
+                        "on-primary-fixed-variant": "#005306",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f5f3f3",
+                        "surface-container": "#f0eded",
+                        "on-surface": "#1b1c1c",
+                        "on-secondary-fixed": "#1f1c00",
+                        "surface-variant": "#e4e2e2",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#dbd9d9",
+                        "on-tertiary-container": "#a8ecff",
+                        "on-background": "#1b1c1c",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#eae8e7",
+                        "tertiary": "#005463",
+                        "inverse-surface": "#303030",
+                        "on-secondary": "#ffffff",
+                        "primary": "#005a07",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#f6e63e",
+                        "surface-tint": "#146e15",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f2f0f0",
+                        "tertiary-fixed-dim": "#7ed3e8",
+                        "secondary-fixed": "#f6e63e",
+                        "on-secondary-fixed-variant": "#4e4800",
+                        "surface": "#fbf9f8",
+                        "on-primary-container": "#9ef88e",
+                        "secondary": "#686000",
+                        "surface-container-highest": "#e4e2e2",
+                        "secondary-fixed-dim": "#d9c91e",
+                        "inverse-primary": "#83db75",
+                        "on-surface-variant": "#40493c",
+                        "tertiary-container": "#006e81",
+                        "surface-bright": "#fbf9f8"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-header {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-bold tracking-tighter text-green-900 flex items-center gap-2">
+<img alt="Mangala Showroom" class="w-auto h-10 w-auto object-contain" data-alt="Mangala Showroom Official Logo" src="https://lh3.googleusercontent.com/aida/ADBb0ujYH4fpw9PubQAAOO-ZK5VsfwkGJFhJ2JzH_7hGQ8rBXoOHtNvQuioU0-kFLIluPGJmZF1EmejYR4kdNZYhrOZWyXTU1wrkCiclRPyqPqo-bFk-FG4SmAN1f8Tzpd32v2vlpYOUUNS_ZflIrPzSrQ3F2pPgH8N-RamUNrDdroDakiEQz4UX0nuNON1thGgoc1-SW5qghRdHvJV9ak13Nw1Ko-a645ZiGnDqAt45f_UWpH_ST2KgJDUooquUfZEz5nBj69VmKBhjQg"/>
+<span></span>
+</div>
+<div class="hidden md:flex gap-6 font-plus-jakarta-sans text-sm tracking-wide">
+<a class="text-green-900 font-bold border-b-2 border-green-800" href="#">Furniture</a>
+<a class="text-zinc-600 hover:text-green-800 transition-colors" href="#">Electronics</a>
+<a class="text-zinc-600 hover:text-green-800 transition-colors" href="#">Wishlist</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="bg-surface-container-high border-none pl-10 pr-4 py-2 rounded-lg text-sm w-64 focus:ring-1 focus:ring-primary outline-none" placeholder="Search collection..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-zinc-600 hover:opacity-80 transition-all scale-95 active:scale-100 duration-200">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="text-zinc-600 hover:opacity-80 transition-all scale-95 active:scale-100 duration-200 relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute -top-1 -right-1 bg-primary text-on-primary text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">2</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-20 px-8 max-w-screen-2xl mx-auto">
+<div class="flex flex-col md:flex-row gap-12">
+<!-- Filter Sidebar -->
+<aside class="w-full md:w-64 flex-shrink-0 space-y-10">
+<div class="space-y-4">
+<h2 class="font-headline text-xl font-bold tracking-tight text-on-surface">Filters</h2>
+<div class="h-0.5 w-8 bg-primary"></div>
+</div>
+<!-- Category Section -->
+<section class="space-y-6">
+<h3 class="font-headline text-sm font-semibold uppercase tracking-widest text-outline">Material</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Teak Wood</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Mahogany</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Velvet Fabric</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Tempered Glass</span>
+</label>
+</div>
+</section>
+<!-- Brand Section -->
+<section class="space-y-6">
+<h3 class="font-headline text-sm font-semibold uppercase tracking-widest text-outline">Brand</h3>
+<div class="flex flex-col gap-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Mangala Signature</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary/20" type="checkbox"/>
+<span class="text-sm font-medium text-on-surface-variant group-hover:text-primary transition-colors">Heritage Modern</span>
+</label>
+</div>
+</section>
+<!-- Price Range Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-center">
+<h3 class="font-headline text-sm font-semibold uppercase tracking-widest text-outline">Price (LKR)</h3>
+<span class="text-xs font-mono text-primary font-semibold">Max 750k</span>
+</div>
+<div class="space-y-4">
+<input class="w-full h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="1000000" min="5000" step="5000" type="range"/>
+<div class="flex justify-between text-[10px] text-outline font-bold uppercase tracking-tighter">
+<span>Rs. 5,000</span>
+<span>Rs. 1,000,000+</span>
+</div>
+</div>
+</section>
+</aside>
+<!-- Product Grid Area -->
+<div class="flex-grow">
+<!-- Grid Header -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h1 class="font-headline text-4xl font-extrabold tracking-tighter text-on-surface">Curated Living</h1>
+<p class="text-on-surface-variant mt-2 max-w-md">Refining Sri Lankan living spaces with artisanal wood and contemporary design.</p>
+</div>
+<div class="flex items-center gap-4 text-sm font-medium">
+<span class="text-outline">Showing 12 of 48 items</span>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-lg cursor-pointer hover:bg-surface-variant transition-colors">
+<span>Sort: Featured</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</div>
+</div>
+</div>
+<!-- 4-Column Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12">
+<!-- Product Card 1 (In Stock) -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="luxury emerald green velvet armchair with gold legs in a minimalist bright gallery setting with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBc92fqu6yVG9_fLiL7m3Hjbymwik2cpsdILYjjGJtE4G1tvpiACD2OfoRDLwKnQD3gVXGb4Z0rCYAE1DL1knhd7kdw7mU5QR3kkZoixD4ArGwgbmKOXw1qhp3o29N3CKNUNQxEGYTmxZTgHCJzG8kECDfumcZSOgLS3xbC_AzcKbtxqZsGF-wl8m0J3XZ3x0lMHJE7G-7c9kutyogA7OBCMt0KIPtR0ZFGKFpV1zjEKrhPi84bkMvCBpKmk5-aFk-Ef_Ky1OLKAaY"/>
+<div class="absolute top-4 right-4">
+<button class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+<div class="absolute bottom-4 left-4">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">New Arrival</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Velvet Heirloom Armchair</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Mangala Signature</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 85,000.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+<!-- Product Card 2 (Out of Stock) -->
+<article class="group opacity-90">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm transition-all duration-500">
+<img class="w-full h-full object-cover grayscale-[20%]" data-alt="contemporary solid teak wood dining table with clean lines and artisan craftsmanship in a sunlit airy dining room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG57Mzx55iXytczUXwjyaxYD2tvBkP5Wj8j7_Y45C8Un4B2HriY_7R3DOEyyf6CLjm4AJcHiDS-Axwxm2aMcIDUOfZ3Kg_S3K9IMMozEpColbC2cDbA8lM8o6HVDxdXffOKYPkPcf5GOy8QkFUUB8oYg0Ft0-XIo3XXoG_O1XSPeeV4qlK_XiVDzkYybhNo57a-f60zfpL3b7_BZGHIdGJbqtUiAWKbSG_DDi9VxX8PeubMehGWKZerpIweDaz9jPMroQR5hzheUI"/>
+<div class="absolute inset-0 bg-zinc-900/10 flex items-center justify-center backdrop-grayscale-[0.5]">
+<span class="bg-white/90 text-zinc-900 text-[10px] font-extrabold uppercase tracking-[0.2em] px-4 py-2">Out of Stock</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Kandy Teak Dining Table</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Heritage Modern</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-outline">Rs. 245,000.00</span>
+<button class="border border-outline-variant text-primary text-xs font-bold px-4 py-2 rounded-sm hover:bg-primary/5 transition-colors">NOTIFY ME</button>
+</div>
+</div>
+</article>
+<!-- Product Card 3 -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="modern minimalist sage green sofa with wooden legs against a textured beige wall in a luxury interior boutique" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrQOZUDTq373Oq3lQsObkSDfWxZp8ZgJ6Z008xwKHs1QUBeV_RIfHBFmJHT0OIsJkAdQyRep8UFJUY99j_8zjHPfK9S4YRkA1l9uP19EECpIqyC7DRqBPdbT-Zm6gP9WihXzZ_B6sk0RW2-VQlsY8TELvCsOhha5TMHb2kVZZdD251ERe5Mdze00Tm8weTOMin0Z-3KiEiwUSFCtPvsMDIWJUtRFTuA4nuB58GUDDbLLAxgnXdMp8OO0IHwo1hQQ25jRHY8qjNNQg"/>
+<div class="absolute top-4 right-4">
+<button class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Mist Fabric 3-Seater</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Mangala Signature</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 162,000.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+<!-- Product Card 4 -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="sleek modern bedside table in dark mahogany wood with brushed brass handles and architectural silhouette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAALnSgPcoJCEAPbUjfsSZ9ZjfPnOZMBkc58jVrexG2YdtQu81toFh9bczLPYmxEzSEu-B-7xe5Xfh_CKCySO3r_KtX__Jwh3EE8yySeMZMrM8DtPrT9u4XsqHtagBFobwWBkMu0Aag8tLCE5uL0KdzLDfMb1BIzdLQwu-J20KWck4LVcFBp1vKJd3LFetlo325IJChIXRVTHsXmnAi_n10xzOjzM5HLQftK3Nk1vmhECMQoS1S8ax8gHir2GOQItrjp86egSAnSFA"/>
+<div class="absolute top-4 right-4">
+<button class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm">
+<span class="material-symbols-outlined text-xl">favorite</span>
+</button>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Brass-Inlay Nightstand</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Heritage Modern</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 42,500.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+<!-- Product Card 5 -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="artisanal hand-woven rattan lounge chair with white linen cushions in a bright tropical villa setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6VNLgSH9Uk98cMgRDC0D-gAn64XHEPl0Vw_ikKScihlkHw8dFXjpLvmxqrnX0ucfuxAwMCccqH04iVhkXYYFMmoVkgE1zGVeHWa6edvr_YveV1NDYziGn5OuMkHBNL1OXzTStnSz8f3ITRGeRepMDpsUjf0SW-rYvFllKQjD2WznXRWSmtol4DCYDGzEI6bTKt4w9AGDsUTJLytSmGaVSbmjTURLn8z-HbyEvBlIt_egX2x0oeXJS1n1GvZg75NCwYzkro1m6qr0"/>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Bentota Rattan Lounge</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Heritage Modern</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 58,000.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+<!-- Product Card 6 (Out of Stock) -->
+<article class="group opacity-90">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm transition-all duration-500">
+<img class="w-full h-full object-cover grayscale-[30%]" data-alt="large architectural floor mirror with arched mahogany frame leaning against a white studio wall" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhQ-V07Jw6wv7bwJcSOF7nyWtfgdEk6LgkCJDoxfNqlWvB-jEPUjMD5m71x3YO7H9pdDVXyuNAXCA_VizjjySrzdtfJekn6KqFYTSWlKqryztS3FwzeP_b0Z4QKrCaIugBh0DCVfOCrHYK0l2zHHBFDk0Eue-oK9uC-jbw_npZXBcxUjImwGR0D78eGcunu8K8Tn2LLT69luLoI6wD9pO8nf3OTRkeOaBZ28KH-6Ki44NViDWZaycoEfvKa5xCKrrKQTOOGWaAyAk"/>
+<div class="absolute inset-0 bg-zinc-900/10 flex items-center justify-center backdrop-grayscale-[0.5]">
+<span class="bg-white/90 text-zinc-900 text-[10px] font-extrabold uppercase tracking-[0.2em] px-4 py-2">Out of Stock</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Arched Manor Mirror</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Mangala Signature</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-outline">Rs. 28,000.00</span>
+<button class="border border-outline-variant text-primary text-xs font-bold px-4 py-2 rounded-sm hover:bg-primary/5 transition-colors">NOTIFY ME</button>
+</div>
+</div>
+</article>
+<!-- Product Card 7 -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="king size platform bed in light oak wood with minimalist headboard and high-end white linen bedding" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBViKbfJgcmZYHWIloJOJ5AW6hhz5G2otUbygpbnlCF_Rskijw5WH3qDWa5R6sU85hRxwoKdWNYR2JDaCSEsUFAwZNsn9IeMYxflDsNzjZ8GGZhlFACqGsd4h-BarcYw4PQ1h30HVIboyS0LdH8Yaljm9TqmFD6OaLynaOdjLWTH-RdWM9nQD8eiFAWpBYMoo7L6FsDzVCNg6n2KCR1RuNArY5P5LuVcP1DixRt7b9NlNGJblj-U6ii1dbgalKI1Vh9uUDxLLUQxCw"/>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Zen Platform Bed</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Mangala Signature</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 195,000.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+<!-- Product Card 8 -->
+<article class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden rounded-lg mb-4 shadow-sm group-hover:shadow-xl transition-all duration-500">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="sculptural white ceramic coffee table with organic curves in a gallery-style living room with neutral tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfCNQoUNAbbu20HYZL-QA9xXyvN7VwQ3n5iQ4KbwWSMDWoCBsvW-UZzbExzpIkMOtU3SLtuDGKqIRYs_de64nckCSu30ueU2D83syQJLwDxUm8Cck6Qm-gcn_f80SVW-7O_5hSVtHdsIjk5LLbcdC1BDBttTrwwt5KcWBvxarywV-a_R8RKjQL8-D5NcXOk0Z620taWvx2c-qHHlC7iJDRQNPXPcGk5-mN07be-hh3HWN1ZaYp3YfKL8KPy4hNxxb5S0G2f7fiVpg"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-on-primary text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded">Exclusive</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline text-lg font-bold text-on-surface">Nebula Stone Table</h4>
+<p class="text-xs text-outline uppercase tracking-wider font-semibold">Heritage Modern</p>
+<div class="pt-2 flex justify-between items-center">
+<span class="font-mono font-bold text-primary">Rs. 112,000.00</span>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold px-4 py-2 rounded-sm tracking-wide shadow-md active:scale-95 transition-all">BUY NOW</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination/Load More -->
+<div class="mt-20 flex flex-col items-center gap-6">
+<button class="px-12 py-4 border border-outline-variant text-primary font-bold tracking-widest text-xs uppercase hover:bg-surface-container transition-all">
+                        Discover More Pieces
+                    </button>
+<div class="flex gap-4">
+<button class="w-8 h-8 flex items-center justify-center text-primary font-bold border-b-2 border-primary">1</button>
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-primary transition-colors">2</button>
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-primary transition-colors">3</button>
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-primary transition-colors">4</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-zinc-50 dark:bg-zinc-950 w-full py-12 border-t border-zinc-200">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-12 max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="text-lg font-bold text-zinc-900 uppercase tracking-widest">Mangala Showroom</div>
+<p class="font-inter text-xs text-zinc-500 leading-relaxed">Curating the finest furniture and electronics for Sri Lankan homes since 1994. Quality craftsmanship meets modern innovation.</p>
+</div>
+<div class="space-y-4">
+<h4 class="font-inter text-xs uppercase tracking-widest text-green-900 font-bold">Quick Links</h4>
+<ul class="space-y-2">
+<li><a class="text-xs text-zinc-500 hover:text-green-700 transition-all uppercase tracking-widest" href="#">About Us</a></li>
+<li><a class="text-xs text-zinc-500 hover:text-green-700 transition-all uppercase tracking-widest" href="#">Store Locator</a></li>
+<li><a class="text-xs text-zinc-500 hover:text-green-700 transition-all uppercase tracking-widest" href="#">Careers</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-inter text-xs uppercase tracking-widest text-green-900 font-bold">Contact Us</h4>
+<ul class="space-y-2">
+<li class="text-xs text-zinc-500 uppercase tracking-widest">Colombo 07, Sri Lanka</li>
+<li class="text-xs text-zinc-500 uppercase tracking-widest">+94 11 234 5678</li>
+<li class="text-xs text-zinc-500 lowercase tracking-widest">concierge@mangala.lk</li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-inter text-xs uppercase tracking-widest text-green-900 font-bold">Newsletter</h4>
+<div class="flex">
+<input class="bg-transparent border-b border-zinc-300 text-[10px] py-2 outline-none w-full tracking-widest" placeholder="YOUR EMAIL" type="email"/>
+<button class="text-primary text-xs font-bold px-2">JOIN</button>
+</div>
+</div>
+</div>
+<div class="mt-12 px-12 max-w-7xl mx-auto flex justify-between items-center pt-8 border-t border-zinc-100">
+<span class="font-inter text-[10px] uppercase tracking-widest text-zinc-400">© 2024 Mangala Showroom. All Rights Reserved. Sri Lanka.</span>
+<div class="flex gap-6">
+<a class="text-[10px] text-zinc-400 hover:text-green-700 uppercase tracking-widest" href="#">Privacy Policy</a>
+<a class="text-[10px] text-zinc-400 hover:text-green-700 uppercase tracking-widest" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Customer Dashboard | MANGALA LUXE</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#a8ecff",
+                        "on-secondary-fixed-variant": "#4e4800",
+                        "tertiary-container": "#006e81",
+                        "inverse-primary": "#83db75",
+                        "tertiary-fixed": "#abedff",
+                        "tertiary": "#005463",
+                        "primary-fixed": "#9ff88e",
+                        "on-primary-fixed-variant": "#005306",
+                        "surface-container-low": "#f5f3f3",
+                        "secondary-fixed": "#f6e63e",
+                        "on-tertiary-fixed": "#001f26",
+                        "surface-container-highest": "#e4e2e2",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#9ef88e",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#dbd9d9",
+                        "primary-container": "#1d741b",
+                        "on-secondary-container": "#6e6600",
+                        "on-background": "#1b1c1c",
+                        "on-error-container": "#93000a",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fbf9f8",
+                        "on-tertiary-fixed-variant": "#004e5c",
+                        "inverse-surface": "#303030",
+                        "surface-container-high": "#eae8e7",
+                        "on-primary-fixed": "#002201",
+                        "on-surface-variant": "#40493c",
+                        "secondary-container": "#f6e63e",
+                        "inverse-on-surface": "#f2f0f0",
+                        "primary-fixed-dim": "#83db75",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "tertiary-fixed-dim": "#7ed3e8",
+                        "primary": "#005a07",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#f0eded",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#bfcab8",
+                        "outline": "#707a6b",
+                        "surface-variant": "#e4e2e2",
+                        "surface-tint": "#146e15",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#d9c91e",
+                        "surface": "#fbf9f8",
+                        "on-secondary-fixed": "#1f1c00",
+                        "background": "#fbf9f8",
+                        "secondary": "#686000"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fbf9f8;
+            color: #1b1c1c;
+        }
+        h1, h2, h3, .font-headline {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl flex justify-between items-center px-8 py-4 max-w-full">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<img alt="MANGALA LUXE" class="h-10 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0ujYH4fpw9PubQAAOO-ZK5VsfwkGJFhJ2JzH_7hGQ8rBXoOHtNvQuioU0-kFLIluPGJmZF1EmejYR4kdNZYhrOZWyXTU1wrkCiclRPyqPqo-bFk-FG4SmAN1f8Tzpd32v2vlpYOUUNS_ZflIrPzSrQ3F2pPgH8N-RamUNrDdroDakiEQz4UX0nuNON1thGgoc1-SW5qghRdHvJV9ak13Nw1Ko-a645ZiGnDqAt45f_UWpH_ST2KgJDUooquUfZEz5nBj69VmKBhjQg"/>
+<span class="text-2xl font-bold tracking-tighter text-green-900 dark:text-green-50 uppercase" style="">MANGALA SHOWROOM</span>
+</div>
+<div class="hidden md:flex items-center space-x-8 font-['Plus_Jakarta_Sans'] font-medium tracking-tight">
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-700 transition-colors" href="#" style="">Collections</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-700 transition-colors" href="#" style="">Electronics</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-700 transition-colors" href="#" style="">Showrooms</a>
+<a class="text-zinc-600 dark:text-zinc-400 hover:text-green-700 transition-colors" href="#" style="">Artisans</a>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="material-symbols-outlined text-zinc-600 hover:bg-zinc-100/50 p-2 rounded-full transition-all active:scale-95" data-icon="shopping_bag" style="">shopping_bag</button>
+<button class="material-symbols-outlined text-green-700 dark:text-green-400 font-bold border-b-2 border-green-700 dark:border-green-400 pb-1" data-icon="person" style="">person</button>
+</div>
+</nav>
+<main class="pt-28 pb-20 px-8 max-w-7xl mx-auto">
+<!-- Welcome Header -->
+<header class="mb-16">
+<span class="text-primary font-headline font-bold tracking-widest text-xs uppercase mb-3 block" style="">Member Exclusive Access</span>
+<h1 class="text-5xl font-headline font-extrabold tracking-tighter text-on-surface mb-2" style="">Welcome back, Arjun.</h1>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed" style="">Your curated selection of artisan furniture and bespoke electronics is ready for review. Your next delivery is currently in transit.</p>
+</header>
+<!-- Bento Layout for Loyalty & Quick Stats -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-20">
+<!-- Loyalty Card -->
+<div class="md:col-span-3 bg-surface-container-lowest p-8 rounded-lg relative overflow-hidden group">
+<div class="relative z-10 flex flex-col h-full justify-between">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary" data-icon="stars" style='font-variation-settings: "FILL" 1;'>stars</span>
+<span class="font-headline font-bold text-sm tracking-widest uppercase" style="">The Obsidian Circle</span>
+</div>
+<h3 class="text-3xl font-headline font-bold mb-2" style="">Mangala Rewards</h3>
+<p class="text-on-surface-variant mb-8 max-w-md" style="">You are 450 points away from unlocking the "Artisan Concierge" tier and early access to the Summer Collection.</p>
+</div>
+<div class="flex items-end justify-between">
+<div class="w-2/3">
+<div class="flex justify-between text-xs font-headline font-bold mb-2">
+<span class="" style="">15,550 PTS</span>
+<span class="" style="">16,000 PTS</span>
+</div>
+<div class="h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%]"></div>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 text-xs font-headline font-bold tracking-widest uppercase rounded-sm hover:opacity-90 transition-opacity" style="">Redeem Points</button>
+</div>
+</div>
+<!-- Decorative element -->
+<div class="absolute -right-10 -bottom-10 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[200px]" data-icon="diamond" style="">diamond</span>
+</div>
+</div>
+<!-- Stats Column -->
+<div class="bg-surface-container-low p-8 rounded-lg flex flex-col justify-center text-center">
+<span class="text-on-surface-variant text-xs font-headline font-bold uppercase tracking-widest mb-2" style="">Active Orders</span>
+<span class="text-5xl font-headline font-extrabold text-primary mb-1" style="">02</span>
+<div class="w-8 h-0.5 bg-secondary mx-auto mb-6"></div>
+<p class="text-xs text-on-surface-variant leading-tight" style="">Expected Delivery:<br/><span class="font-bold text-on-surface" style="">Oct 14, 2024</span></p>
+</div>
+</div>
+<!-- Recent Orders Carousel (Milestone Tracking) -->
+<section class="mb-20">
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="text-3xl font-headline font-bold tracking-tight" style="">My Recent Orders</h2>
+<p class="text-on-surface-variant text-sm mt-1" style="">Real-time artisan production and delivery tracking.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:bg-white hover:text-primary transition-all" style="">
+<span class="material-symbols-outlined" data-icon="chevron_left" style="">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-full border border-outline-variant/30 flex items-center justify-center text-on-surface-variant hover:bg-white hover:text-primary transition-all" style="">
+<span class="material-symbols-outlined" data-icon="chevron_right" style="">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Order Card 1 -->
+<div class="bg-white p-8 rounded-lg shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-10">
+<div class="flex gap-6">
+<div class="w-24 h-24 bg-surface-container rounded-sm overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="close-up of a handcrafted walnut wood coffee table with minimalist design and rich grain texture in a sunlit studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzeVaNo7gNvcw3WBSl3N5BOzuH8yNA4rcKNwdxRcbcNhLR581uaAwf0svhBrfdD_mALQQdlwqZqUtNdmcz9TTh3roVoYFaUdsA7aI2tth6IjpdSZ4GIUIWUE-EGObM8lTXArzBZtVxawXKOE7dPjW9H8mEAlx_Vs8HVUkqEpYaJGUt9e20XNfWNAz99cm_MbVjzJIVk2GqT1aHzhUcAhFAIH43quUgFmVi62BSQbERbjnwUBns-X8JtLWt68UkAQ-1OFnvrP0v7Kg" style=""/>
+</div>
+<div>
+<span class="text-[10px] font-headline font-bold text-zinc-400 uppercase tracking-widest mb-1 block" style="">Order #ML-92834</span>
+<h4 class="text-xl font-headline font-bold mb-1" style="">Hand-Carved Suede Sofa</h4>
+<p class="text-primary font-bold" style="">Rs. 85,000.00</p>
+</div>
+</div>
+<div class="bg-secondary-container/20 text-secondary text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter" style="">In Transit</div>
+</div>
+<!-- Milestone Stepper -->
+<div class="relative pt-4">
+<div class="absolute top-7 left-0 w-full h-[1px] bg-outline-variant/30 z-0"></div>
+<div class="relative z-10 flex justify-between">
+<div class="text-center group">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-white text-xs" data-icon="check" style="">check</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface" style="">Ordered</span>
+</div>
+<div class="text-center group">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-white text-xs" data-icon="check" style="">check</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface" style="">Crafting</span>
+</div>
+<div class="text-center group">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-white text-xs" data-icon="local_shipping" style='font-variation-settings: "FILL" 1;'>local_shipping</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest text-primary" style="">In Transit</span>
+</div>
+<div class="text-center group opacity-30">
+<div class="w-6 h-6 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-on-surface-variant text-xs" data-icon="home" style="">home</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest" style="">Delivered</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="bg-white p-8 rounded-lg shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-10">
+<div class="flex gap-6">
+<div class="w-24 h-24 bg-surface-container rounded-sm overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="architectural shot of a high-end OLED television integrated into a minimalist marble and wood wall panel system" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-4rsWrzrH-YJeI1Q1duZy_9mOzEzkLsVZ5md0iwdCSsxnvVumC1Yjehpq4HCJUIcLhRN7nPC7IDWfBeeMB_SkNQSxq6rR3HsH8aAr2oegVyaZc5z3NmGTzbCiY8qOLgoszFJwwEeBwjMOHK_ZjEt0ewC2Dq4Q5QC1H21M-_CA7eYcJWb5De4KhWs7cKvyFp4TBkHilxU7OQFwcv4osQrQmWnNcB8zzZMo0PuDLgnTQqHzWxgcJUd6jmH1_2ZgCD_CU4OJEVNruyo" style=""/>
+</div>
+<div>
+<span class="text-[10px] font-headline font-bold text-zinc-400 uppercase tracking-widest mb-1 block" style="">Order #ML-92839</span>
+<h4 class="text-xl font-headline font-bold mb-1" style="">Quantum Series 4K Display</h4>
+<p class="text-primary font-bold" style="">Rs. 1,20,000.00</p>
+</div>
+</div>
+<div class="bg-surface-container-high text-on-surface-variant text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter" style="">Processing</div>
+</div>
+<!-- Milestone Stepper -->
+<div class="relative pt-4">
+<div class="absolute top-7 left-0 w-full h-[1px] bg-outline-variant/30 z-0"></div>
+<div class="relative z-10 flex justify-between">
+<div class="text-center group">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-white text-xs" data-icon="check" style="">check</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest text-on-surface" style="">Ordered</span>
+</div>
+<div class="text-center group">
+<div class="w-6 h-6 rounded-full bg-white border-2 border-primary flex items-center justify-center mx-auto mb-3">
+<div class="w-2 h-2 bg-primary rounded-full"></div>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest text-primary" style="">QC Audit</span>
+</div>
+<div class="text-center group opacity-30">
+<div class="w-6 h-6 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-on-surface-variant text-xs" data-icon="local_shipping" style="">local_shipping</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest" style="">In Transit</span>
+</div>
+<div class="text-center group opacity-30">
+<div class="w-6 h-6 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center mx-auto mb-3">
+<span class="material-symbols-outlined text-on-surface-variant text-xs" data-icon="home" style="">home</span>
+</div>
+<span class="text-[10px] font-headline font-bold uppercase tracking-widest" style="">Delivered</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Wishlist Grid -->
+<section>
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="text-3xl font-headline font-bold tracking-tight" style="">Curated Wishlist</h2>
+<p class="text-on-surface-variant text-sm mt-1" style="">Pieces you're watching for your showroom.</p>
+</div>
+<a class="text-primary font-headline font-bold text-xs uppercase tracking-widest border-b border-primary/20 pb-1 hover:border-primary transition-all" href="#" style="">View All Favorites</a>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Wishlist Item 1 -->
+<div class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="stunning minimalist floor lamp with brushed brass finish and hand-blown glass globe in a dark-toned sophisticated living room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbGASSCkwLoqv-y7p1vIBF81TpHm46AEb7JgODMTokb10q1p9sOZZayfyZMhm6T9nxuqYA9MZWry5U70SfzOH3JzR01o7kuE77BhbA_M84AD8FSbQrdSUwR1wzdcLF73pi9RmJLCp-JJX9uFFYkAAgVr7b9RWG4PxM_XsLOo0UEDAvc9i8gJquV5f7AMza1Fx_VUrNaC59QbcmueMeOFNX-jzB6UdNFxun13TqTcEcUGEH94e7iKKHbnQyAFRQrcQzEmkOrgVeQjg" style=""/>
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full text-primary hover:bg-primary hover:text-white transition-all" style="">
+<span class="material-symbols-outlined text-sm" data-icon="close" style="">close</span>
+</button>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline font-semibold text-lg" style="">Solaris Floor Lamp</h4>
+<p class="text-primary font-bold" style="">Rs. 18,500.00</p>
+<button class="w-full mt-4 bg-primary text-on-primary py-3 text-[10px] font-headline font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-2 group/btn active:scale-95 duration-200" style="">
+                            Add to Bag
+                            <span class="material-symbols-outlined text-xs" data-icon="arrow_forward" style="">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Wishlist Item 2 (Out of Stock) -->
+<div class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-4 grayscale-[0.5]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="elegant dark emerald velvet armchair with gold-tipped legs in a sun-drenched library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMb6IbpCCSBcpV3wF-0-yIMMpJZoAyO3PQJKTT_D38JZS5NunkPLPFdHwPkEWY4Qbx9hXNOeWsKrYin3RlW75GBIiAvnUsCVM2TbfpOjNRn2IcfBGZplgK6VGsDyQVnd-t996iAxFGdJIbk6WLNjI2S0JduNvIaYYpUjSHl3Qmfqhb9VRC6Uby4tL3besV_gm6botUUmEfnTgz6Q7qKGivWqR4VKxKq8IWGfhMxOYh4Ddch8jeLTvEdAFvfBp74IuZTZwUE-p02Ec" style=""/>
+<div class="absolute inset-0 bg-black/5 flex items-center justify-center">
+<span class="bg-white/90 backdrop-blur-md text-[10px] font-headline font-extrabold uppercase tracking-widest px-4 py-2" style="">Reserved Out</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline font-semibold text-lg" style="">Emerald Velvet Throne</h4>
+<p class="text-zinc-400 font-bold line-through" style="">Rs. 42,000.00</p>
+<button class="w-full mt-4 border border-outline-variant/50 text-on-surface-variant py-3 text-[10px] font-headline font-bold tracking-widest uppercase rounded-sm hover:bg-on-surface hover:text-white transition-all" style="">
+                            Notify Me
+                        </button>
+</div>
+</div>
+<!-- Wishlist Item 3 -->
+<div class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-4">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="luxury wireless audio system with wood paneling and minimalist controls in a high-end modern interior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDX9_2vqG_6AwxnYeH9v1ia5iDiJqcof3dGcoCS0oQR5Yo7BNuWebhl7KjFmp16FJ2xIcgDF5QpH-gN4pPQJZIcTc9ca4hP64d1EfmZ9rcNGTJyyUIuMzQU4BTCfb1H8AP9z83yg1Tvw5aJ8t1gTz99V4tSIYGClSgn13840YU8o62ky9S85Dg3mu8YKR3XPyBTqcT_gMZfjgwRPLGLeu7mBlV8jsDUg5Ngbc-3HyncYus-w1Fw4HHDL5nRfWJbD42IMVjMlKoX8g" style=""/>
+<button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full text-primary" style="">
+<span class="material-symbols-outlined text-sm" data-icon="close" style="">close</span>
+</button>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline font-semibold text-lg" style="">Ethereal Sound System</h4>
+<p class="text-primary font-bold" style="">Rs. 64,000.00</p>
+<button class="w-full mt-4 bg-primary text-on-primary py-3 text-[10px] font-headline font-bold tracking-widest uppercase rounded-sm flex items-center justify-center gap-2 active:scale-95 duration-200" style="">
+                            Add to Bag
+                            <span class="material-symbols-outlined text-xs" data-icon="arrow_forward" style="">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Wishlist Item 4 (Out of Stock) -->
+<div class="group">
+<div class="relative aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-4 grayscale-[0.8]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="sculptural white marble side table with asymmetrical base in a clean bright architectural space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfQzYH0RASKFqB1FBorKzWI72vtM3O6dt4iDrL37GNRIRoqLqd2vSVplP_mVLIVr0--ht9mKp2OWiT8-18h9UWxGPLxulLrxWlkDWyRrjmI5ifRH_c8Ch7yJJ5L-7H9op4QNdsgpbB6a47vNZVYtJZjh_-hcmZspwS9yHF8UoycduUjrNIzVn2tUupMjT1_uQmxfIjt0yfeyG_J4WkqI1gu59N3RjMzHp6Yu8rL8lfbPrEV_bCCB74JTGa40kvoEdkEOyg0rutgYQ" style=""/>
+<div class="absolute inset-0 bg-black/5 flex items-center justify-center">
+<span class="bg-white/90 backdrop-blur-md text-[10px] font-headline font-extrabold uppercase tracking-widest px-4 py-2" style="">Crafting Queue Full</span>
+</div>
+</div>
+<div class="space-y-1">
+<h4 class="font-headline font-semibold text-lg" style="">Carrara Pivot Table</h4>
+<p class="text-zinc-400 font-bold line-through" style="">Rs. 28,000.00</p>
+<button class="w-full mt-4 border border-outline-variant/50 text-on-surface-variant py-3 text-[10px] font-headline font-bold tracking-widest uppercase rounded-sm hover:bg-on-surface hover:text-white transition-all" style="">
+                            Notify Me
+                        </button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-12 border-t-0 bg-zinc-50 dark:bg-zinc-950 flex flex-col md:flex-row justify-between items-center px-12 space-y-4 md:space-y-0">
+<div class="text-zinc-500 dark:text-zinc-500 font-['Plus_Jakarta_Sans'] text-xs tracking-wide" style="">
+            © 2024 Mangala Luxe Gallery. All Rights Reserved.
+        </div>
+<div class="flex items-center space-x-8 font-['Plus_Jakarta_Sans'] text-xs tracking-wide">
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-green-700 transition-opacity" href="#" style="">Privacy Policy</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-green-700 transition-opacity" href="#" style="">Terms of Service</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-green-700 transition-opacity" href="#" style="">Shipping Info</a>
+<a class="text-zinc-500 dark:text-zinc-500 hover:text-green-700 transition-opacity" href="#" style="">Contact Us</a>
+</div>
+</footer>
+<!-- FAB for Support (Contextual) -->
+<button class="fixed bottom-8 right-8 bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all z-50" style="">
+<span class="material-symbols-outlined" data-icon="support_agent" style="">support_agent</span>
+</button>
+</body></html>
