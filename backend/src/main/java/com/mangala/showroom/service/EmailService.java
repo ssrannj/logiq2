@@ -2,84 +2,102 @@ package com.mangala.showroom.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    private static final String RESEND_API_URL = "https://api.resend.com/emails";
 
-    @Autowired(required = false)
-    private JavaMailSender mailSender;
+    @Value("${resend.api.key:}")
+    private String resendApiKey;
 
-    @Value("${app.mail.from:noreply@mangala.lk}")
+    @Value("${app.mail.from:onboarding@resend.dev}")
     private String fromAddress;
 
-    @Value("${spring.mail.username:}")
-    private String mailUsername;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    private boolean isMailConfigured() {
-        return mailSender != null && mailUsername != null && !mailUsername.isBlank();
+    private boolean isConfigured() {
+        return resendApiKey != null && !resendApiKey.isBlank();
+    }
+
+    private void send(String to, String subject, String html) {
+        if (!isConfigured()) {
+            log.warn("RESEND_API_KEY not set — skipping email to {}", to);
+            return;
+        }
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(resendApiKey);
+
+            Map<String, Object> body = Map.of(
+                "from", fromAddress,
+                "to", List.of(to),
+                "subject", subject,
+                "html", html
+            );
+
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+            ResponseEntity<String> response = restTemplate.postForEntity(RESEND_API_URL, request, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                log.info("Email sent via Resend to {} — subject: {}", to, subject);
+            } else {
+                log.error("Resend returned non-2xx status {} for email to {}: {}", response.getStatusCode(), to, response.getBody());
+            }
+        } catch (Exception e) {
+            log.error("Failed to send email via Resend to {}: {}", to, e.getMessage());
+        }
     }
 
     public void sendPaymentVerifiedEmail(String toEmail, Long orderId, BigDecimal total) {
-        if (!isMailConfigured()) {
-            log.warn("Mail not configured — skipping payment verified email to {}", toEmail);
-            return;
-        }
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromAddress);
-            message.setTo(toEmail);
-            message.setSubject("✅ Your Mangala Showroom Order #" + orderId + " has been Confirmed");
-            message.setText(
-                "Dear Customer,\n\n" +
-                "Great news! Your payment for Order #" + String.format("%06d", orderId) + " has been verified " +
-                "and your order is now confirmed.\n\n" +
-                "Order Total: Rs. " + String.format("%,.2f", total) + "\n\n" +
-                "Our team is now processing your order. You will receive further updates as your order " +
-                "progresses through our fulfilment pipeline.\n\n" +
-                "You can track your order at any time by visiting the Mangala Showroom website.\n\n" +
-                "Thank you for shopping with us.\n\n" +
-                "Warm regards,\n" +
-                "Mangala Showroom Team"
-            );
-            mailSender.send(message);
-            log.info("Payment verified email sent to {} for order #{}", toEmail, orderId);
-        } catch (Exception e) {
-            log.error("Failed to send payment verified email to {}: {}", toEmail, e.getMessage());
-        }
+        String subject = "Your Mangala Showroom Order #" + String.format("%06d", orderId) + " is Confirmed";
+        String html = "<div style='font-family:Inter,sans-serif;max-width:600px;margin:0 auto;color:#333'>" +
+            "<div style='background:#005a07;padding:24px 32px;border-radius:8px 8px 0 0'>" +
+            "<h1 style='color:#fff;margin:0;font-size:22px'>Mangala Showroom</h1>" +
+            "</div>" +
+            "<div style='padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px'>" +
+            "<h2 style='color:#005a07;margin-top:0'>&#10003; Order Confirmed!</h2>" +
+            "<p>Dear Customer,</p>" +
+            "<p>Great news! Your payment for <strong>Order #" + String.format("%06d", orderId) + "</strong> " +
+            "has been verified and your order is now confirmed.</p>" +
+            "<div style='background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 24px;margin:24px 0'>" +
+            "<p style='margin:0;font-size:18px'>Order Total: <strong>Rs. " + String.format("%,.2f", total) + "</strong></p>" +
+            "</div>" +
+            "<p>Our team is now processing your order. You can track your order status anytime on the " +
+            "Mangala Showroom website.</p>" +
+            "<p style='margin-top:32px'>Warm regards,<br><strong>Mangala Showroom Team</strong></p>" +
+            "</div>" +
+            "</div>";
+        send(toEmail, subject, html);
     }
 
     public void sendBackInStockEmail(String toEmail, String productName, Long productId) {
-        if (!isMailConfigured()) {
-            log.warn("Mail not configured — skipping back-in-stock email to {}", toEmail);
-            return;
-        }
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom(fromAddress);
-            message.setTo(toEmail);
-            message.setSubject("🔔 Back in Stock: " + productName + " — Mangala Showroom");
-            message.setText(
-                "Dear Customer,\n\n" +
-                "Good news! A product on your wishlist is back in stock:\n\n" +
-                "  " + productName + "\n\n" +
-                "Visit the Mangala Showroom to secure your piece before it sells out again.\n\n" +
-                "Thank you for your patience and continued interest.\n\n" +
-                "Warm regards,\n" +
-                "Mangala Showroom Team"
-            );
-            mailSender.send(message);
-            log.info("Back-in-stock email sent to {} for product '{}'", toEmail, productName);
-        } catch (Exception e) {
-            log.error("Failed to send back-in-stock email to {}: {}", toEmail, e.getMessage());
-        }
+        String subject = "Back in Stock: " + productName + " — Mangala Showroom";
+        String html = "<div style='font-family:Inter,sans-serif;max-width:600px;margin:0 auto;color:#333'>" +
+            "<div style='background:#005a07;padding:24px 32px;border-radius:8px 8px 0 0'>" +
+            "<h1 style='color:#fff;margin:0;font-size:22px'>Mangala Showroom</h1>" +
+            "</div>" +
+            "<div style='padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px'>" +
+            "<h2 style='color:#005a07;margin-top:0'>&#128276; Back in Stock!</h2>" +
+            "<p>Dear Customer,</p>" +
+            "<p>Good news! A product on your wishlist is back in stock:</p>" +
+            "<div style='background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px 24px;margin:24px 0'>" +
+            "<p style='margin:0;font-size:18px;font-weight:600'>" + productName + "</p>" +
+            "</div>" +
+            "<p>Visit Mangala Showroom to secure your piece before it sells out again.</p>" +
+            "<p style='margin-top:32px'>Warm regards,<br><strong>Mangala Showroom Team</strong></p>" +
+            "</div>" +
+            "</div>";
+        send(toEmail, subject, html);
     }
 }

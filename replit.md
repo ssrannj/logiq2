@@ -45,6 +45,14 @@ A full-stack premium furniture and electronics showroom app built with React (Vi
 - Database schema auto-managed by Hibernate (`ddl-auto=update`)
 - Seed data (products + admin user) auto-loaded via `DataInitializer`
 
+## Email (Resend)
+
+- Email is sent via **Resend REST API** (not SMTP) — `spring-boot-starter-mail` is NOT used
+- API key stored as `RESEND_API_KEY` secret, read via `resend.api.key` property
+- FROM address defaults to `onboarding@resend.dev` (works for testing, sends only to account owner)
+- **To send to real customer emails**: verify a domain in Resend dashboard (resend.com), then set `MAIL_FROM` env var to `noreply@yourdomain.com`
+- Email triggers: order status → "Order Confirmed" (payment verified), wishlist back-in-stock scheduler
+
 ## Maven
 
 Maven is bundled at `/home/runner/workspace/maven/apache-maven-3.9.9`.
