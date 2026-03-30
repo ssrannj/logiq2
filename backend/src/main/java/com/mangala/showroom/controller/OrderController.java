@@ -128,8 +128,16 @@ public class OrderController {
         }
 
         // Build safe milestones (no private/admin data)
-        List<String> statusKeys = Arrays.asList("VERIFYING", "PACKED", "IN_TRANSIT", "DELIVERED");
-        List<String> statusLabels = Arrays.asList("Payment Verifying", "Packed & Ready", "In Transit", "Delivered");
+        List<String> statusKeys = Arrays.asList(
+            "PENDING_PAYMENT", "PAYMENT_VERIFICATION_IN_PROGRESS", "ORDER_CONFIRMED",
+            "PROCESSING", "PACKED", "READY_FOR_DISPATCH", "HANDED_OVER_TO_SHIPPING",
+            "IN_TRANSIT", "ARRIVED_AT_REGIONAL_HUB", "OUT_FOR_DELIVERY", "DELIVERED"
+        );
+        List<String> statusLabels = Arrays.asList(
+            "Pending Payment", "Verifying Payment", "Order Confirmed",
+            "Processing", "Packed", "Ready for Dispatch", "Handed to Courier",
+            "In Transit", "At Regional Hub", "Out for Delivery", "Delivered"
+        );
         int currentIndex = statusKeys.indexOf(order.getStatus().name());
 
         List<GuestTrackResponse.Milestone> milestones = new ArrayList<>();

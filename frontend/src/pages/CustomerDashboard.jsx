@@ -130,9 +130,18 @@ export default function CustomerDashboard() {
             
             {!loadingOrders && orders.map(o => {
                // Stepper Logic calculations
-               const isVerifying = o.status === 'VERIFYING';
-               const isPacked = o.status === 'PACKED' || o.status === 'IN_TRANSIT' || o.status === 'DELIVERED';
-               const isTransit = o.status === 'IN_TRANSIT' || o.status === 'DELIVERED';
+               const STATUS_STEPS = [
+                 'PENDING_PAYMENT', 'PAYMENT_VERIFICATION_IN_PROGRESS', 'ORDER_CONFIRMED',
+                 'PROCESSING', 'PACKED', 'READY_FOR_DISPATCH', 'HANDED_OVER_TO_SHIPPING',
+                 'IN_TRANSIT', 'ARRIVED_AT_REGIONAL_HUB', 'OUT_FOR_DELIVERY', 'DELIVERED',
+               ];
+               const isCancelled = o.status === 'CANCELLED';
+               const isDelayed = o.status === 'DELIVERY_DELAYED';
+               const effectiveSt = isDelayed ? 'OUT_FOR_DELIVERY' : o.status;
+               const statusIdx = STATUS_STEPS.indexOf(effectiveSt);
+               const step1Done = !isCancelled && statusIdx >= 0;
+               const step2Done = !isCancelled && statusIdx >= 2;
+               const step3Done = !isCancelled && statusIdx >= 6;
                const isDelivered = o.status === 'DELIVERED';
 
                return (
@@ -152,8 +161,13 @@ export default function CustomerDashboard() {
                           <p className="text-[#005a07] font-bold">Rs. {o.total.toLocaleString()}</p>
                         </div>
                       </div>
-                      <div className="bg-[#f6e63e]/20 text-[#686000] text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter">
-                        {o.status.replace('_', ' ')}
+                      <div className={`text-[10px] px-3 py-1 rounded-full font-headline font-bold uppercase tracking-tighter
+                        ${o.status === 'DELIVERED' ? 'bg-green-100 text-green-800' : ''}
+                        ${o.status === 'CANCELLED' ? 'bg-red-100 text-red-700' : ''}
+                        ${o.status === 'DELIVERY_DELAYED' ? 'bg-orange-100 text-orange-700' : ''}
+                        ${!['DELIVERED','CANCELLED','DELIVERY_DELAYED'].includes(o.status) ? 'bg-[#f6e63e]/20 text-[#686000]' : ''}
+                      `}>
+                        {o.status.replace(/_/g, ' ')}
                       </div>
                     </div>
 
@@ -164,28 +178,30 @@ export default function CustomerDashboard() {
                       
                       <div className="relative z-10 flex justify-between">
                         
-                        {/* Step 1: Verification (Always completed if it exists) */}
+                        {/* Step 1: Payment */}
                         <div className="text-center group">
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${true ? 'bg-[#005a07]' : 'bg-[#e4e2e2]'}`}>
-                            <span className="material-symbols-outlined text-[12px]">check</span>
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step1Done ? 'bg-[#005a07]' : isCancelled ? 'bg-red-500' : 'bg-[#e4e2e2]'}`}>
+                            {isCancelled ? <span className="material-symbols-outlined text-[12px]">close</span> : <span className="material-symbols-outlined text-[12px]">check</span>}
                           </div>
-                          <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-[#1b1c1c]">Audited</span>
+                          <span className="text-[10px] font-headline font-bold uppercase tracking-widest text-[#1b1c1c]">Payment</span>
                         </div>
 
-                        {/* Step 2: Crafting / Packed */}
-                        <div className={`text-center group ${!isPacked ? 'opacity-30' : ''}`}>
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${isPacked ? 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
-                             {isPacked ? <span className="material-symbols-outlined text-[12px]">check</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">box</span>}
+                        {/* Step 2: Preparing */}
+                        <div className={`text-center group ${!step2Done ? 'opacity-30' : ''}`}>
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step2Done ? 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
+                             {step2Done ? <span className="material-symbols-outlined text-[12px]">check</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">package_2</span>}
                           </div>
-                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${isPacked ? 'text-[#1b1c1c]' : 'text-[#707a6b]'}`}>Logistics</span>
+                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${step2Done ? 'text-[#1b1c1c]' : 'text-[#707a6b]'}`}>Preparing</span>
                         </div>
 
-                        {/* Step 3: Transit */}
-                        <div className={`text-center group ${!isTransit ? 'opacity-30' : ''}`}>
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${isTransit ? 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
-                            {isTransit ? <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_shipping</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">local_shipping</span>}
+                        {/* Step 3: Shipping */}
+                        <div className={`text-center group ${!step3Done ? 'opacity-30' : ''}`}>
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center mx-auto mb-3 text-white ${step3Done ? isDelayed ? 'bg-orange-500' : 'bg-[#005a07]' : 'bg-[#f5f3f3] border border-[#bfcab8]'}`}>
+                            {step3Done ? <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_shipping</span> : <span className="material-symbols-outlined text-[#707a6b] text-[12px]">local_shipping</span>}
                           </div>
-                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${isTransit ? 'text-[#005a07]' : 'text-[#707a6b]'}`}>In Transit</span>
+                          <span className={`text-[10px] font-headline font-bold uppercase tracking-widest ${step3Done ? isDelayed ? 'text-orange-600' : 'text-[#005a07]' : 'text-[#707a6b]'}`}>
+                            {isDelayed ? 'Delayed' : 'Shipping'}
+                          </span>
                         </div>
 
                         {/* Step 4: Delivered */}

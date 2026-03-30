@@ -57,7 +57,7 @@ public class OrderService {
 
         // Create and save the order
         Order order = new Order();
-        order.setStatus(OrderStatus.VERIFYING);
+        order.setStatus(OrderStatus.PENDING_PAYMENT);
         order.setTotal(total != null ? total : BigDecimal.ZERO);
         order.setReceiptFilePath(targetPath.toString());
         order.setCustomerName(customerName);

@@ -59,7 +59,7 @@ public class Order {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         if (this.status == null) {
-            this.status = OrderStatus.VERIFYING;
+            this.status = OrderStatus.PENDING_PAYMENT;
         }
     }
 

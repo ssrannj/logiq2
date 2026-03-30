@@ -5,13 +5,24 @@ import { getOrder, trackGuestOrder } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const STEPS = [
-  { key: 'VERIFYING',  label: 'Payment Verifying', icon: 'verified_user',  desc: 'Order confirmed and payment check initiated.' },
-  { key: 'PACKED',     label: 'Packed & Ready',    icon: 'package_2',      desc: 'Securely packaged for premium shipping.' },
-  { key: 'IN_TRANSIT', label: 'In Transit',         icon: 'local_shipping', desc: 'Your items are on the way to the delivery hub.' },
-  { key: 'DELIVERED',  label: 'Delivered',          icon: 'home_pin',       desc: 'Package successfully delivered to your door.' },
+  { key: 'PENDING_PAYMENT',                 label: 'Awaiting Payment',     icon: 'payments',         desc: 'Order placed and awaiting payment confirmation.' },
+  { key: 'PAYMENT_VERIFICATION_IN_PROGRESS',label: 'Verifying Payment',    icon: 'verified_user',    desc: 'Your bank slip is being reviewed by our team.' },
+  { key: 'ORDER_CONFIRMED',                 label: 'Order Confirmed',       icon: 'task_alt',         desc: 'Payment verified and your order is confirmed.' },
+  { key: 'PROCESSING',                      label: 'Processing',            icon: 'manufacturing',    desc: 'Your items are being prepared and sourced.' },
+  { key: 'PACKED',                          label: 'Packed',                icon: 'package_2',        desc: 'Securely packaged and ready for handover.' },
+  { key: 'READY_FOR_DISPATCH',              label: 'Ready for Dispatch',    icon: 'deployed_code',    desc: 'Package is staged and awaiting courier pickup.' },
+  { key: 'HANDED_OVER_TO_SHIPPING',         label: 'Handed to Courier',     icon: 'handshake',        desc: 'Package handed over to the shipping partner.' },
+  { key: 'IN_TRANSIT',                      label: 'In Transit',            icon: 'local_shipping',   desc: 'Your items are on their way to the regional hub.' },
+  { key: 'ARRIVED_AT_REGIONAL_HUB',         label: 'At Regional Hub',       icon: 'warehouse',        desc: 'Package has arrived at the nearest hub.' },
+  { key: 'OUT_FOR_DELIVERY',                label: 'Out for Delivery',      icon: 'delivery_truck_speed', desc: 'Your delivery is on the way to your address.' },
+  { key: 'DELIVERED',                       label: 'Delivered',             icon: 'home_pin',         desc: 'Package successfully delivered to your door.' },
 ];
 
-const STATUS_ORDER = ['VERIFYING', 'PACKED', 'IN_TRANSIT', 'DELIVERED'];
+const STATUS_ORDER = [
+  'PENDING_PAYMENT', 'PAYMENT_VERIFICATION_IN_PROGRESS', 'ORDER_CONFIRMED',
+  'PROCESSING', 'PACKED', 'READY_FOR_DISPATCH', 'HANDED_OVER_TO_SHIPPING',
+  'IN_TRANSIT', 'ARRIVED_AT_REGIONAL_HUB', 'OUT_FOR_DELIVERY', 'DELIVERED',
+];
 
 const formatDate = (iso) => {
   if (!iso) return '';
@@ -23,15 +34,27 @@ const formatPrice = (n) =>
   `LKR ${Number(n).toLocaleString('en-LK', { minimumFractionDigits: 2 })}`;
 
 const statusLabel = {
-  VERIFYING: 'Verifying Payment',
-  PACKED: 'Packed & Ready',
-  IN_TRANSIT: 'In Transit',
-  DELIVERED: 'Delivered',
+  PENDING_PAYMENT:                  'Awaiting Payment',
+  PAYMENT_VERIFICATION_IN_PROGRESS: 'Verifying Payment',
+  ORDER_CONFIRMED:                  'Order Confirmed',
+  PROCESSING:                       'Processing',
+  PACKED:                           'Packed',
+  READY_FOR_DISPATCH:               'Ready for Dispatch',
+  HANDED_OVER_TO_SHIPPING:          'Handed to Courier',
+  IN_TRANSIT:                       'In Transit',
+  ARRIVED_AT_REGIONAL_HUB:          'At Regional Hub',
+  OUT_FOR_DELIVERY:                 'Out for Delivery',
+  DELIVERED:                        'Delivered',
+  DELIVERY_DELAYED:                 'Delivery Delayed',
+  CANCELLED:                        'Cancelled',
 };
 
 // ── Shared Tracking View ─────────────────────────────────────────────────────
 function TrackingView({ order, onBack, navigate }) {
-  const currentStepIndex = STATUS_ORDER.indexOf(order.status);
+  const isCancelled = order.status === 'CANCELLED';
+  const isDelayed = order.status === 'DELIVERY_DELAYED';
+  const effectiveStatus = isDelayed ? 'OUT_FOR_DELIVERY' : order.status;
+  const currentStepIndex = isCancelled ? -1 : STATUS_ORDER.indexOf(effectiveStatus);
 
   return (
     <>
@@ -66,7 +89,28 @@ function TrackingView({ order, onBack, navigate }) {
         </div>
       </section>
 
+      {/* Special status banners */}
+      {isDelayed && (
+        <div className="mb-8 flex items-start gap-4 p-5 rounded-xl bg-orange-50 border border-orange-200 text-orange-800">
+          <span className="material-symbols-outlined text-2xl shrink-0 text-orange-500" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
+          <div>
+            <p className="font-bold text-sm" style={{ fontFamily: 'Plus Jakarta Sans' }}>Delivery Delayed</p>
+            <p className="text-sm mt-0.5">Your package is experiencing a delay. Our team is working to resolve this. We apologise for the inconvenience.</p>
+          </div>
+        </div>
+      )}
+      {isCancelled && (
+        <div className="mb-8 flex items-start gap-4 p-5 rounded-xl bg-red-50 border border-red-200 text-red-800">
+          <span className="material-symbols-outlined text-2xl shrink-0 text-red-500" style={{ fontVariationSettings: "'FILL' 1" }}>cancel</span>
+          <div>
+            <p className="font-bold text-sm" style={{ fontFamily: 'Plus Jakarta Sans' }}>Order Cancelled</p>
+            <p className="text-sm mt-0.5">This order has been cancelled. If you believe this is an error, please contact support.</p>
+          </div>
+        </div>
+      )}
+
       {/* Progress Bar (horizontal on mobile, then vertical stepper) */}
+      {!isCancelled && (
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
         {/* Vertical Milestone Stepper */}
         <div className="lg:col-span-7 bg-[var(--color-surface-container-low)] p-10 rounded-xl">
@@ -188,6 +232,7 @@ function TrackingView({ order, onBack, navigate }) {
           </div>
         </div>
       </section>
+      )}
 
       {/* Help */}
       <section className="mt-14 text-center">

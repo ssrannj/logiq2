@@ -331,16 +331,28 @@ export default function AdminDashboard() {
                           value={o.status}
                           onChange={(e) => handleUpdateOrderStatus(o.id, e.target.value)}
                           className={`text-xs font-bold uppercase tracking-widest py-2 px-3 rounded-lg border-none focus:ring-2 focus:ring-[#005a07] shadow-sm appearance-none cursor-pointer
-                            ${o.status === 'VERIFYING' ? 'bg-[#f6e63e]/20 text-[#686000]' : ''}
-                            ${o.status === 'PACKED' ? 'bg-blue-100 text-blue-800' : ''}
-                            ${o.status === 'IN_TRANSIT' ? 'bg-indigo-100 text-indigo-800' : ''}
-                            ${o.status === 'DELIVERED' ? 'bg-[#1d741b]/10 text-[#005a07]' : ''}
+                            ${['PENDING_PAYMENT','PAYMENT_VERIFICATION_IN_PROGRESS'].includes(o.status) ? 'bg-yellow-100 text-yellow-800' : ''}
+                            ${['ORDER_CONFIRMED','PROCESSING'].includes(o.status) ? 'bg-blue-100 text-blue-800' : ''}
+                            ${['PACKED','READY_FOR_DISPATCH'].includes(o.status) ? 'bg-indigo-100 text-indigo-800' : ''}
+                            ${['HANDED_OVER_TO_SHIPPING','IN_TRANSIT','ARRIVED_AT_REGIONAL_HUB','OUT_FOR_DELIVERY'].includes(o.status) ? 'bg-purple-100 text-purple-800' : ''}
+                            ${o.status === 'DELIVERED' ? 'bg-green-100 text-green-800' : ''}
+                            ${o.status === 'DELIVERY_DELAYED' ? 'bg-orange-100 text-orange-800' : ''}
+                            ${o.status === 'CANCELLED' ? 'bg-red-100 text-red-700' : ''}
                           `}
                         >
-                          <option value="VERIFYING">PENDING AUDIT</option>
-                          <option value="PACKED">CRAFTED & PACKED</option>
-                          <option value="IN_TRANSIT">IN TRANSIT</option>
-                          <option value="DELIVERED">FULFILLED</option>
+                          <option value="PENDING_PAYMENT">Pending Payment</option>
+                          <option value="PAYMENT_VERIFICATION_IN_PROGRESS">Verifying Payment</option>
+                          <option value="ORDER_CONFIRMED">Order Confirmed</option>
+                          <option value="PROCESSING">Processing</option>
+                          <option value="PACKED">Packed</option>
+                          <option value="READY_FOR_DISPATCH">Ready for Dispatch</option>
+                          <option value="HANDED_OVER_TO_SHIPPING">Handed to Courier</option>
+                          <option value="IN_TRANSIT">In Transit</option>
+                          <option value="ARRIVED_AT_REGIONAL_HUB">At Regional Hub</option>
+                          <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
+                          <option value="DELIVERED">Delivered</option>
+                          <option value="DELIVERY_DELAYED">Delivery Delayed</option>
+                          <option value="CANCELLED">Cancelled</option>
                         </select>
                       </td>
                     </tr>
