@@ -61,4 +61,4 @@ build = ["bash", "-c", "export MAVEN_HOME=/home/runner/workspace/maven/apache-ma
 [userenv]
 
 [userenv.shared]
-MAIL_USERNAME = "jimmyxsaran@gmail.com"
+MAIL_USERNAME = "jeyanthansaran@gmail.com"
