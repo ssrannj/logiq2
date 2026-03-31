@@ -7,7 +7,15 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:register": "cypress run --spec cypress/e2e/01_register.cy.js",
+    "cy:run:login": "cypress run --spec cypress/e2e/02_login.cy.js",
+    "cy:run:validation": "cypress run --spec cypress/e2e/03_validation.cy.js",
+    "cy:run:order": "cypress run --spec cypress/e2e/04_product_order.cy.js",
+    "cy:run:tracking": "cypress run --spec cypress/e2e/05_order_tracking.cy.js",
+    "cy:run:admin": "cypress run --spec cypress/e2e/06_admin.cy.js"
   },
   "dependencies": {
     "axios": "^1.14.0",
@@ -16,6 +24,7 @@
     "react-router-dom": "^7.13.2"
   },
   "devDependencies": {
+    "cypress": "^15.13.0",
     "@eslint/js": "^9.39.4",
     "@tailwindcss/vite": "^4.2.2",
     "@types/react": "^19.2.14",
