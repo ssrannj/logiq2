@@ -7,6 +7,7 @@ com/mangala/showroom/model/User.class
 com/mangala/showroom/security/UserDetailsImpl.class
 com/mangala/showroom/security/UserDetailsServiceImpl.class
 com/mangala/showroom/security/AuthEntryPointJwt.class
+com/mangala/showroom/controller/SpaController.class
 com/mangala/showroom/controller/ProductController.class
 com/mangala/showroom/controller/WishlistController.class
 com/mangala/showroom/security/SecurityConfig.class
