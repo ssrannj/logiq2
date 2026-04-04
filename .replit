@@ -55,8 +55,8 @@ externalPort = 8080
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["bash", "-c", "cd backend && java -Dapp.static-dir=file:../frontend/dist/ -Dserver.port=5000 -jar target/showroom-0.0.1-SNAPSHOT.jar"]
-build = ["bash", "-c", "cd frontend && npm install && npm run build"]
+run = ["npm", "start"]
+build = ["npm", "run", "build"]
 
 [userenv]
 

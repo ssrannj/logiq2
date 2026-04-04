@@ -1,0 +1,9 @@
+{
+  "name": "mangala-showroom",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && java -Dapp.static-dir=file:../frontend/dist/ -Dserver.port=5000 -jar target/showroom-0.0.1-SNAPSHOT.jar"
+  }
+}
