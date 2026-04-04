@@ -6,7 +6,6 @@
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/GlobalExceptionHandler.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/OrderController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/ProductController.java
-/home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/SpaController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/UserController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/controller/WishlistController.java
 /home/runner/workspace/backend/src/main/java/com/mangala/showroom/model/Category.java

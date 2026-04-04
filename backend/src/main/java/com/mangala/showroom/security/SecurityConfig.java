@@ -72,23 +72,23 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> 
-                auth.requestMatchers("/api/auth/**").permitAll()
+            .authorizeHttpRequests(auth ->
+                auth
+                    // Public API endpoints
+                    .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/categories").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/orders/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/orders/*").permitAll()
                     .requestMatchers("/api/orders/checkout").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/orders/track-guest").permitAll()
-                    // Allow serving the React frontend (SPA + static assets)
-                    .requestMatchers(HttpMethod.GET, "/", "/index.html").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/assets/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/*.js", "/*.css", "/*.svg", "/*.ico", "/*.png", "/*.jpg", "/*.webp", "/*.woff2", "/*.woff", "/*.ttf", "/*.map").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/{path:[^\\.]*}", "/{path:[^\\.]*}/**").permitAll()
+                    // Protected API endpoints
                     .requestMatchers(HttpMethod.POST, "/api/products").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PUT, "/api/products/admin/**").hasRole("ADMIN")
                     .requestMatchers(HttpMethod.PATCH, "/api/orders/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                    .requestMatchers("/api/**").authenticated()
+                    // Everything else (static files + SPA routes) is public
+                    .anyRequest().permitAll()
             );
 
         http.authenticationProvider(authenticationProvider());
