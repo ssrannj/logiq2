@@ -338,6 +338,15 @@ export default function AdminDashboard() {
             <span className="material-symbols-outlined text-lg">category</span>
             <span>Categories</span>
           </button>
+          <div className="pt-2 pb-1"><div className="border-t border-[#e4e2e2]" /></div>
+          <button
+            onClick={() => navigate('/admin/logiq')}
+            className="w-full flex items-center space-x-3 px-4 py-3 font-semibold rounded-lg shadow-sm transition-all duration-200 hover:translate-x-1 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200"
+          >
+            <span className="material-symbols-outlined text-lg">psychology</span>
+            <span>LogiQ Brain</span>
+            <span className="ml-auto text-[9px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">New</span>
+          </button>
         </nav>
 
         <div className="mt-auto pt-6 border-t border-[#e4e2e2]">
@@ -429,6 +438,36 @@ export default function AdminDashboard() {
                 </div>
                 <p className="text-[#40493c] text-sm font-medium mb-1">Total Catalog Pieces</p>
                 <h3 className="font-headline text-3xl font-extrabold">{products.length}</h3>
+              </div>
+            </section>
+
+            {/* LogiQ Brain CTA */}
+            <section
+              onClick={() => navigate('/admin/logiq')}
+              className="cursor-pointer mb-8 rounded-xl overflow-hidden shadow-sm border border-indigo-200 bg-gradient-to-r from-[#0f1729] to-[#1e2d5a] hover:shadow-lg transition-shadow"
+            >
+              <div className="p-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-indigo-500/20 border border-indigo-400/30 rounded-xl flex items-center justify-center">
+                    <span className="material-symbols-outlined text-2xl text-indigo-300">psychology</span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h4 className="font-headline text-white font-bold text-lg tracking-tight">LogiQ Brain</h4>
+                      <span className="text-[9px] font-bold bg-indigo-500 text-white px-2 py-0.5 rounded-full uppercase tracking-widest">New</span>
+                    </div>
+                    <p className="text-indigo-300 text-sm">Smart Delivery Tracker — Routes, Fleet, Drivers, QR Dispatch, Reconciliation & more</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right mr-2">
+                    <p className="text-white/40 text-xs font-semibold uppercase tracking-widest">Active Deliveries</p>
+                    <p className="text-white font-extrabold text-xl">14</p>
+                  </div>
+                  <div className="w-9 h-9 bg-indigo-600 rounded-lg flex items-center justify-center">
+                    <span className="material-symbols-outlined text-white text-lg">arrow_forward</span>
+                  </div>
+                </div>
               </div>
             </section>
 

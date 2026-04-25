@@ -10,6 +10,7 @@ import TrackingPage from './pages/TrackingPage';
 import AuthPage from './pages/AuthPage';
 import AdminDashboard from './pages/AdminDashboard';
 import CustomerDashboard from './pages/CustomerDashboard';
+import LogiqBrain from './pages/LogiqBrain';
 
 export default function App() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
 
             <Route element={<ProtectedRoute roleRequired="ADMIN" />}>
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/logiq" element={<LogiqBrain />} />
             </Route>
           </Routes>
         </BrowserRouter>
