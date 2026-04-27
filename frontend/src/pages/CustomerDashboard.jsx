@@ -33,7 +33,7 @@ export default function CustomerDashboard() {
 
     try {
       const wRes = await getWishlist();
-      setWishlist(wRes.data.map(w => w.product));
+      setWishlist(wRes.data.map(w => w.product).filter(Boolean));
     } catch {
       setWishlist([]);
     } finally {
