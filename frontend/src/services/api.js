@@ -54,6 +54,7 @@ export const updateOrderStatus = (id, status) =>
 // ─── User Profile ────────────────────────────────────────────────────────────
 export const getUserProfile = () => API.get('/api/user/profile');
 export const getWarranties = () => API.get('/api/user/warranties');
+export const getAllUsers = () => API.get('/api/user/admin/all');
 
 // ─── Guest Order Tracking ─────────────────────────────────────────────────────
 export const trackGuestOrder = (orderId, email) =>

@@ -12,9 +12,13 @@ import com.mangala.showroom.repository.UserRepository;
 import com.mangala.showroom.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -105,5 +109,27 @@ public class UserController {
         }
 
         return ResponseEntity.ok(warranties);
+    }
+
+    @GetMapping("/admin/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<java.util.Map<String, Object>>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<java.util.Map<String, Object>> result = new ArrayList<>();
+        for (User u : users) {
+            java.util.Map<String, Object> m = new LinkedHashMap<>();
+            m.put("id", u.getId());
+            m.put("name", u.getName());
+            m.put("email", u.getEmail());
+            m.put("fullName", u.getFullName() != null ? u.getFullName() : u.getName());
+            m.put("phoneNumber", u.getPhoneNumber() != null ? u.getPhoneNumber() : "—");
+            m.put("address", u.getAddress() != null ? u.getAddress() : "—");
+            m.put("role", u.getRole().toString());
+            m.put("points", u.getPoints());
+            long orderCount = orderRepository.findByUserIdAndStatus(u.getId(), OrderStatus.DELIVERED).size();
+            m.put("totalOrders", orderCount);
+            result.add(m);
+        }
+        return ResponseEntity.ok(result);
     }
 }

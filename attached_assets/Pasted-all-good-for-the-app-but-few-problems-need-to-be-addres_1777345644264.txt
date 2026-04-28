@@ -1,0 +1,23 @@
+all good for the app, but few problems need to be addressed and fix, so when in admin page, in the global order tracking, wasn't able to switch between switch engine(pending payment,order confirmed, delivered, etc..... thise status of the order) so pls check and fix it
+
+all add the items to inventory is good, but better you add warranty column there, so admin can set it's warranty days there in, so once the items got delivered to the custyomer, automatically the countndown start to run
+
+can you confirm me that in Logiq Brain in admin portal is interconnected across the same site, and some features there need to be addrerssed for small fixes, tell me how urgue ques got assigned and also make sure we haved to able to view their orders and also tell me how it got assigned? is it dummy data, or in reality how we should add the pending orders there, give good solution for that
+
+for the route planner, when creating route, we have to add route and stops and assign pending orders there and able to click view the orders and different stops and assign for that route on a day assign driver and vehicle, so make sure to do it logically in reality working
+
+vehicle capacity is okay, no problem if you can logicalky improve anything there, pls go ahead, no worries
+
+and stock distribution idea, i dont get it, just you have commonly put as units, what about specific unit availability and assigning them bitterly, i dont like the logic you have used for it, practoically wasn't great, so pls give technically  good reemdy for that
+
+and for the interbranch requests,all good, but you didn't give get the options of selecting multiple items, and items we have in invemntory should show up and also I feel if the LogiQ is working between multiple locations(shops and warehouses) why dont tyou amke sure to get dummy values for those location with invemntory count and also if I click the inventorty it shoukd show how many items are left and in which shop t is available , so make sure to get us it logically great deeply, coz you need to think betetrly to get this implementation well
+
+and pls tell me how this qr dispatch does works , to explaian it to the instructor
+
+damange ticket is good, no problem at all. but instead of descrition wise typing it should be unioqely selected, coz it will impacet the driver bonus so pls look at that logic
+
+tell me how accounr t reconcillation works and any logical technical update needed for that, then pls do that accordingly to make it better
+
+and also how the driver bonus works? just dummily you have put instead for each driver it should be able to once they completed a delivery , then it will show there and we have a percentage of share for each in each delivery, so it automatically got assigned, and bonyus varies from delivery destination and maximum deliveries made in a date, less damage tickets;  damage tickets reduce it, and why di you put ratings there, how it got work, so pls do thinsg logivally working, not just for dummily show off to the instructor
+
+and make sure all of them are interconnected and working well, and also I guess we are missing features like customer data base in admin dash board and also role management assignment with giving access permission to admin dashboard, and selecting who can do which and what and what not , pemsiossns and normally my admin@mangala.lk will be super admin, but in role management i have to able to give access to who can do whaat and who cant do that, event templaates of permissions are tehre some need to be manually override, so pls checj those logixc and put it accordingly ; apart from that all oterhs are super good and working well, so no worries and pls do help me fix those and we can make it as good product 
