@@ -46,11 +46,15 @@ public class AuthController {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             Role role = Role.valueOf(userDetails.getAuthorities().iterator().next().getAuthority().replace("ROLE_", ""));
 
+            User dbUser = userRepository.findByEmail(userDetails.getEmail()).orElse(null);
+            boolean forcePasswordChange = dbUser != null && dbUser.isForcePasswordChange();
+
             return ResponseEntity.ok(new JwtResponse(jwt,
                     userDetails.getId(),
                     userDetails.getName(),
                     userDetails.getUsername(),
-                    role));
+                    role,
+                    forcePasswordChange));
         } catch (org.springframework.security.authentication.BadCredentialsException e) {
             return ResponseEntity.badRequest().body(java.util.Map.of("error", "Invalid email or password. Please check your credentials."));
         } catch (Exception e) {

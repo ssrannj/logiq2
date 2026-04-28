@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAllOrders } from '../services/api';
 
 /* ─── Distance Tiers & Bonus Rates ────────────────────────────── */
 const DIST_TIERS = { local: { label: 'Local (<20km)', rate: 50 }, regional: { label: 'Regional (20-100km)', rate: 150 }, outstation: { label: 'Outstation (>100km)', rate: 300 } };
@@ -338,10 +339,24 @@ function UrgeQueueView({ pendingOrders, setPendingOrders }) {
         }
       />
 
+      {/* Live data indicator */}
+      {pendingOrders.some(o => o.isReal) && (
+        <div className="mb-4 flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-sm text-green-800">
+          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
+          <span><strong>{pendingOrders.filter(o => o.isReal).length} live order(s)</strong> pulled from your database are shown at the top. Demo orders below show how the queue behaves with more volume.</span>
+        </div>
+      )}
+      {!pendingOrders.some(o => o.isReal) && (
+        <div className="mb-4 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
+          <span className="material-symbols-outlined text-amber-600 text-base">info</span>
+          <span>No live orders found in the database with a dispatchable status (ORDER_CONFIRMED / PROCESSING / PACKED). <strong>Demo orders below</strong> show how the Urge Queue looks when orders are flowing.</span>
+        </div>
+      )}
+
       {showInfo && (
         <div className="mb-5">
           <Alert type="info">
-            <strong>How the Urge Queue works:</strong> Any order with status ORDER_CONFIRMED or PROCESSING in the main order management system — that has not yet been assigned to a delivery driver — automatically appears here. The priority score is calculated as: Urgent flag (+50) + deadline urgency (0–75) + order age (0–20). The admin assigns an available driver, which locks that driver to the order. In a production deployment this queue is a real-time pull from the orders database.
+            <strong>How the Urge Queue works:</strong> When a customer places an order and it reaches ORDER_CONFIRMED or PROCESSING status in the admin Orders tab, it automatically appears here — pulled live from your database. The priority score is: Urgent flag (+50) + deadline urgency (0–75) + order age (0–20). The admin assigns a driver from the dropdown; once dispatched, the order moves out of the queue. Demo orders supplement the view when there are few live orders — they do not affect the real database.
           </Alert>
         </div>
       )}
@@ -358,9 +373,12 @@ function UrgeQueueView({ pendingOrders, setPendingOrders }) {
           <thead><tr>{['Order','Customer','Priority Score','Urgency','Driver','Distance','Actions'].map(h=><Th key={h} ch={h} />)}</tr></thead>
           <tbody>
             {queue.map(o => (
-              <tr key={o.id} className={`hover:bg-gray-50 ${o.urgency==='Critical'?'bg-red-50/30':''}`}>
+              <tr key={o.id} className={`hover:bg-gray-50 ${o.urgency==='Critical'?'bg-red-50/30':o.isReal?'bg-green-50/20':''}`}>
                 <Td>
-                  <button onClick={() => setViewOrder(o)} className="font-mono font-bold text-indigo-600 hover:underline text-left">{o.id}</button>
+                  <div className="flex items-center gap-1.5">
+                    <button onClick={() => setViewOrder(o)} className="font-mono font-bold text-indigo-600 hover:underline text-left">{o.id}</button>
+                    {o.isReal && <span className="px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-green-100 text-green-700 rounded-full border border-green-300">LIVE</span>}
+                  </div>
                 </Td>
                 <Td>
                   <div><p className="font-semibold text-gray-800">{o.customer}</p><p className="text-xs text-gray-400 truncate max-w-[150px]">{o.address}</p></div>
@@ -1638,6 +1656,54 @@ export default function LogiqBrain() {
   const [codList,          setCodList]         = useState(INIT_COD);
   const [dispatchLog,      setDispatchLog]     = useState(INIT_DISPATCH_LOG);
   const [ratings,          setRatings]         = useState(INIT_RATINGS);
+
+  /* Fetch real orders from database and merge into the Urge Queue */
+  useEffect(() => {
+    const LIVE_STATUSES = ['ORDER_CONFIRMED', 'PROCESSING', 'PACKED', 'READY_FOR_DISPATCH'];
+    getAllOrders()
+      .then(res => {
+        const data = Array.isArray(res?.data) ? res.data : [];
+        const liveOrders = data
+          .filter(o => LIVE_STATUSES.includes(o.status))
+          .map(o => {
+            const itemCount = Object.values(o.items || {}).reduce((s, q) => s + q, 0);
+            const createdAt = o.createdAt ? new Date(o.createdAt) : new Date();
+            const ageInDays = Math.max(0, Math.floor((Date.now() - createdAt.getTime()) / 86400000));
+            const urgency = ageInDays >= 3 ? 'Critical' : ageInDays >= 2 ? 'High' : ageInDays >= 1 ? 'Medium' : 'Low';
+            const itemList = Object.entries(o.items || {}).map(([productId, qty]) => ({
+              name: `Product #${productId}`, qty, price: Math.round((o.total || 0) / Math.max(1, itemCount)),
+            }));
+            return {
+              id: `#ORD-${String(o.id).padStart(4, '0')}`,
+              orderId: o.id,
+              customer: o.customerName || 'Customer',
+              phone: o.phoneNumber || '—',
+              address: o.address || '—',
+              items: itemList,
+              total: Number(o.total) || 0,
+              weightKg: Math.max(5, itemCount * 12),
+              distanceKm: 10,
+              urgentFlag: ageInDays >= 2,
+              deadlineDays: Math.max(0, 3 - ageInDays),
+              orderAge: ageInDays,
+              urgency,
+              driver: 'Unassigned',
+              status: 'Pending',
+              route: null,
+              isReal: true,
+            };
+          });
+
+        if (liveOrders.length > 0) {
+          setPendingOrders(prev => {
+            const realIds = new Set(liveOrders.map(o => o.id));
+            const demoOrders = prev.filter(o => !o.isReal && !realIds.has(o.id));
+            return [...liveOrders, ...demoOrders];
+          });
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const sharedProps = {
     pendingOrders, setPendingOrders,

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProducts, addProduct, deleteProduct, getAllOrders, updateOrderStatus, updateProduct,
-  getCategories, addCategory, deleteCategory, getAllUsers } from '../services/api';
+  getCategories, addCategory, deleteCategory, getAllUsers, createStaffAccount } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const ALL_PERMISSIONS = [
@@ -67,6 +67,11 @@ export default function AdminDashboard() {
   const [showNewStaff, setShowNewStaff] = useState(false);
   const [newStaff, setNewStaff] = useState({ name: '', email: '', role: 'Store Manager', permissions: ROLE_TEMPLATES['Store Manager'] });
   const [roleSearchFilter, setRoleSearchFilter] = useState('');
+  const [generatedPassword, setGeneratedPassword] = useState('');
+  const [staffCreateStatus, setStaffCreateStatus] = useState(null);
+  const [staffCreateError, setStaffCreateError] = useState('');
+  const [copiedPassword, setCopiedPassword] = useState(false);
+  const [customersError, setCustomersError] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -78,21 +83,23 @@ export default function AdminDashboard() {
     setError(null);
     try {
       const [catRes] = await Promise.all([getCategories()]);
-      setCategories(catRes.data);
+      setCategories(Array.isArray(catRes?.data) ? catRes.data : []);
 
       if (activeTab === 'inventory' || activeTab === 'overview') {
         const resP = await getProducts();
-        setProducts(resP.data);
+        setProducts(Array.isArray(resP?.data) ? resP.data : []);
       }
       if (activeTab === 'orders' || activeTab === 'overview') {
         const resO = await getAllOrders();
-        setOrders(resO.data);
+        setOrders(Array.isArray(resO?.data) ? resO.data : []);
       }
       if (activeTab === 'customers') {
+        setCustomersError(null);
         try {
           const resU = await getAllUsers();
-          setCustomers(resU.data);
-        } catch {
+          setCustomers(Array.isArray(resU?.data) ? resU.data : []);
+        } catch (err) {
+          setCustomersError(err.response?.data?.error || 'Could not load customer data.');
           setCustomers([]);
         }
       }
@@ -102,8 +109,16 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
-  const subCategories = categories.filter(c => c.parentId !== null);
-  const rootCategories = categories.filter(c => c.parentId === null);
+  const generateTempPassword = () => {
+    const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!';
+    let pwd = 'Mgla@';
+    for (let i = 0; i < 6; i++) pwd += chars[Math.floor(Math.random() * chars.length)];
+    setGeneratedPassword(pwd);
+    setCopiedPassword(false);
+  };
+
+  const subCategories = (categories || []).filter(c => c?.parentId !== null);
+  const rootCategories = (categories || []).filter(c => c?.parentId === null);
 
   const handleAddCategory = async (e) => {
     e.preventDefault();
@@ -235,11 +250,33 @@ export default function AdminDashboard() {
     setEditingStaff(null);
   };
 
-  const addNewStaff = () => {
+  const addNewStaff = async () => {
     if (!newStaff.name || !newStaff.email) return;
-    const id = staffMembers.length + 1;
-    setStaffMembers(list => [...list, { ...newStaff, id, active: true }]);
+    if (!generatedPassword) {
+      setStaffCreateError('Please generate a temporary password first.');
+      return;
+    }
+    setStaffCreateStatus('creating');
+    setStaffCreateError('');
+    try {
+      await createStaffAccount({ name: newStaff.name, email: newStaff.email, password: generatedPassword });
+      const id = staffMembers.length + 1;
+      setStaffMembers(list => [...list, { ...newStaff, id, active: true }]);
+      const permsKey = `mangala_permissions_${newStaff.email}`;
+      localStorage.setItem(permsKey, JSON.stringify(newStaff.permissions));
+      setStaffCreateStatus('success');
+    } catch (err) {
+      setStaffCreateError(err.response?.data?.error || 'Failed to create account.');
+      setStaffCreateStatus('error');
+    }
+  };
+
+  const resetNewStaffForm = () => {
     setNewStaff({ name: '', email: '', role: 'Store Manager', permissions: ROLE_TEMPLATES['Store Manager'] });
+    setGeneratedPassword('');
+    setStaffCreateStatus(null);
+    setStaffCreateError('');
+    setCopiedPassword(false);
     setShowNewStaff(false);
   };
 
@@ -777,22 +814,29 @@ export default function AdminDashboard() {
 
         {/* ─── CUSTOMERS ─── */}
         {activeTab === 'customers' && (
-          <div className="animate-in fade-in duration-500">
+          <div>
+            {customersError && (
+              <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3 text-sm text-red-700">
+                <span className="material-symbols-outlined text-red-500">error</span>
+                <span>{customersError}</span>
+                <button onClick={fetchData} className="ml-auto text-xs font-bold underline">Retry</button>
+              </div>
+            )}
             <div className="grid grid-cols-3 gap-6 mb-8">
               <div className="bg-white p-6 rounded-xl border border-[#e4e2e2] shadow-sm">
                 <span className="material-symbols-outlined text-[#005a07] text-2xl mb-2 block">people</span>
                 <p className="text-3xl font-extrabold font-headline">{customers.length}</p>
-                <p className="text-sm text-[#707a6b] mt-1">Total Registered Customers</p>
+                <p className="text-sm text-[#707a6b] mt-1">Total Registered Users</p>
               </div>
               <div className="bg-white p-6 rounded-xl border border-[#e4e2e2] shadow-sm">
                 <span className="material-symbols-outlined text-amber-500 text-2xl mb-2 block">star</span>
-                <p className="text-3xl font-extrabold font-headline">{customers.filter(c => (c.points || 0) > 10000).length}</p>
+                <p className="text-3xl font-extrabold font-headline">{customers.filter(c => (c?.points || 0) > 10000).length}</p>
                 <p className="text-sm text-[#707a6b] mt-1">Premium Loyalty Members</p>
               </div>
               <div className="bg-white p-6 rounded-xl border border-[#e4e2e2] shadow-sm">
                 <span className="material-symbols-outlined text-blue-500 text-2xl mb-2 block">local_shipping</span>
-                <p className="text-3xl font-extrabold font-headline">{customers.reduce((s, c) => s + (c.totalOrders || 0), 0)}</p>
-                <p className="text-sm text-[#707a6b] mt-1">Total Delivered Orders</p>
+                <p className="text-3xl font-extrabold font-headline">{customers.reduce((s, c) => s + (c?.totalOrders || 0), 0)}</p>
+                <p className="text-sm text-[#707a6b] mt-1">Total Orders (All Time)</p>
               </div>
             </div>
 
@@ -814,39 +858,49 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody className="text-sm font-body">
                   {customers.length === 0 && !loading && (
-                    <tr><td colSpan="6" className="p-8 text-center text-zinc-400 italic">No customers found or still loading...</td></tr>
+                    <tr><td colSpan="6" className="p-8 text-center text-zinc-400 italic">
+                      {customersError ? 'Could not load customers.' : 'No registered users found.'}
+                    </td></tr>
                   )}
-                  {customers.map(c => (
-                    <tr key={c.id} className="hover:bg-[#f5f3f3] border-b border-[#f5f3f3] transition-colors">
-                      <td className="px-8 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-[#005a07]/10 flex items-center justify-center font-bold text-[#005a07] text-sm font-headline">
-                            {(c.name || c.fullName || '?')[0].toUpperCase()}
+                  {customers.map((c, idx) => {
+                    const displayName = c?.fullName || c?.name || 'Unknown';
+                    const displayInitial = displayName.charAt(0).toUpperCase() || '?';
+                    const displayId = c?.id != null ? String(c.id).padStart(5, '0') : String(idx + 1).padStart(5, '0');
+                    const displayRole = c?.role || 'CUSTOMER';
+                    const displayPoints = c?.points ?? 0;
+                    const displayOrders = c?.totalOrders ?? 0;
+                    return (
+                      <tr key={c?.id ?? idx} className="hover:bg-[#f5f3f3] border-b border-[#f5f3f3] transition-colors">
+                        <td className="px-8 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-[#005a07]/10 flex items-center justify-center font-bold text-[#005a07] text-sm font-headline">
+                              {displayInitial}
+                            </div>
+                            <div>
+                              <p className="font-bold text-[#1b1c1c]">{displayName}</p>
+                              <p className="text-xs text-[#707a6b]">#{displayId}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-bold text-[#1b1c1c]">{c.fullName || c.name}</p>
-                            <p className="text-xs text-[#707a6b]">#{c.id.toString().padStart(5, '0')}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-8 py-4">
-                        <p className="text-sm">{c.email}</p>
-                        <p className="text-xs text-zinc-400">{c.phoneNumber}</p>
-                      </td>
-                      <td className="px-8 py-4 text-xs text-[#40493c] max-w-[180px] truncate">{c.address}</td>
-                      <td className="px-8 py-4">
-                        <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight ${(c.points || 0) > 10000 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'}`}>
-                          {(c.points || 0).toLocaleString()} pts
-                        </span>
-                      </td>
-                      <td className="px-8 py-4">
-                        <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${c.role === 'ADMIN' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
-                          {c.role}
-                        </span>
-                      </td>
-                      <td className="px-8 py-4 font-bold text-[#005a07]">{c.totalOrders || 0}</td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-8 py-4">
+                          <p className="text-sm">{c?.email || '—'}</p>
+                          <p className="text-xs text-zinc-400">{c?.phoneNumber || '—'}</p>
+                        </td>
+                        <td className="px-8 py-4 text-xs text-[#40493c] max-w-[180px] truncate">{c?.address || '—'}</td>
+                        <td className="px-8 py-4">
+                          <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tight ${displayPoints > 10000 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'}`}>
+                            {displayPoints.toLocaleString()} pts
+                          </span>
+                        </td>
+                        <td className="px-8 py-4">
+                          <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${displayRole === 'ADMIN' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                            {displayRole}
+                          </span>
+                        </td>
+                        <td className="px-8 py-4 font-bold text-[#005a07]">{displayOrders}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -880,44 +934,114 @@ export default function AdminDashboard() {
 
             {showNewStaff && (
               <div className="bg-white rounded-2xl border border-[#005a07]/20 border-t-4 border-t-[#005a07] p-6 mb-6 shadow-sm">
-                <h3 className="font-headline font-bold text-[#005a07] mb-4">New Staff Member</h3>
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Full Name</label>
-                    <input value={newStaff.name} onChange={e => setNewStaff(s => ({...s, name: e.target.value}))}
-                      className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm" placeholder="e.g. Kamal Perera" />
+                {staffCreateStatus === 'success' ? (
+                  <div className="text-center py-6">
+                    <span className="material-symbols-outlined text-[#005a07] text-5xl block mb-3">check_circle</span>
+                    <p className="font-headline font-bold text-[#1b1c1c] text-lg mb-1">Account Created!</p>
+                    <p className="text-sm text-[#707a6b] mb-4">Share these credentials securely with <strong>{newStaff.name}</strong>:</p>
+                    <div className="bg-[#f5f3f3] rounded-xl p-4 text-left max-w-sm mx-auto space-y-2 mb-5">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-[#707a6b]">Email</span>
+                        <span className="font-bold text-[#1b1c1c]">{newStaff.email}</span>
+                      </div>
+                      <div className="flex justify-between text-sm items-center">
+                        <span className="text-[#707a6b]">Temp Password</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-[#005a07] font-mono">{generatedPassword}</span>
+                          <button onClick={() => { navigator.clipboard.writeText(generatedPassword); setCopiedPassword(true); }}
+                            className="text-xs text-[#005a07] border border-[#005a07]/30 px-2 py-0.5 rounded-lg hover:bg-[#005a07]/5">
+                            {copiedPassword ? '✓ Copied' : 'Copy'}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2 inline-block mb-5">
+                      They will be prompted to change this password on first login.
+                    </p>
+                    <br />
+                    <button onClick={resetNewStaffForm}
+                      className="bg-gradient-to-br from-[#005a07] to-[#1d741b] text-white px-8 py-2.5 rounded-xl font-bold text-sm hover:opacity-90">
+                      Done
+                    </button>
                   </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Email</label>
-                    <input type="email" value={newStaff.email} onChange={e => setNewStaff(s => ({...s, email: e.target.value}))}
-                      className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm" placeholder="name@mangala.lk" />
-                  </div>
-                  <div>
-                    <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Role Template</label>
-                    <select value={newStaff.role} onChange={e => applyTemplate(e.target.value, 'new')}
-                      className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm">
-                      {Object.keys(ROLE_TEMPLATES).filter(r => r !== 'Super Admin').map(r => <option key={r}>{r}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-2">Permissions</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {ALL_PERMISSIONS.map(p => (
-                      <label key={p.key} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all text-sm ${newStaff.permissions.includes(p.key) ? 'border-[#005a07]/30 bg-[#005a07]/5' : 'border-[#e4e2e2] hover:bg-[#f5f3f3]'}`}>
-                        <input type="checkbox" checked={newStaff.permissions.includes(p.key)} onChange={() => togglePerm(p.key, 'new')} className="accent-[#005a07]" />
-                        <span className="material-symbols-outlined text-[#005a07] text-sm">{p.icon}</span>
-                        {p.label}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex gap-3">
-                  <button onClick={addNewStaff}
-                    className="bg-gradient-to-br from-[#005a07] to-[#1d741b] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90">Add Staff</button>
-                  <button onClick={() => setShowNewStaff(false)}
-                    className="px-6 py-2.5 border border-[#e4e2e2] rounded-xl font-bold text-sm text-[#40493c] hover:bg-[#f5f3f3]">Cancel</button>
-                </div>
+                ) : (
+                  <>
+                    <h3 className="font-headline font-bold text-[#005a07] mb-4">New Staff Member</h3>
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                      <div>
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Full Name</label>
+                        <input value={newStaff.name} onChange={e => setNewStaff(s => ({...s, name: e.target.value}))}
+                          className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm" placeholder="e.g. Kamal Perera" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Email</label>
+                        <input type="email" value={newStaff.email} onChange={e => setNewStaff(s => ({...s, email: e.target.value}))}
+                          className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm" placeholder="name@mangala.lk" />
+                      </div>
+                      <div>
+                        <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-1">Role Template</label>
+                        <select value={newStaff.role} onChange={e => applyTemplate(e.target.value, 'new')}
+                          className="w-full bg-[#f5f3f3] px-4 py-2.5 rounded-xl outline-none focus:ring-2 focus:ring-[#005a07] text-sm">
+                          {Object.keys(ROLE_TEMPLATES).filter(r => r !== 'Super Admin').map(r => <option key={r}>{r}</option>)}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="mb-4">
+                      <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-2">Permissions</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {ALL_PERMISSIONS.map(p => (
+                          <label key={p.key} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all text-sm ${newStaff.permissions.includes(p.key) ? 'border-[#005a07]/30 bg-[#005a07]/5' : 'border-[#e4e2e2] hover:bg-[#f5f3f3]'}`}>
+                            <input type="checkbox" checked={newStaff.permissions.includes(p.key)} onChange={() => togglePerm(p.key, 'new')} className="accent-[#005a07]" />
+                            <span className="material-symbols-outlined text-[#005a07] text-sm">{p.icon}</span>
+                            {p.label}
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mb-4 p-4 bg-[#f5f3f3] rounded-xl">
+                      <label className="text-[10px] uppercase font-bold tracking-widest text-[#707a6b] block mb-2">Temporary Password</label>
+                      <div className="flex items-center gap-3">
+                        <div className="flex-1 bg-white border border-[#e4e2e2] rounded-xl px-4 py-2.5 font-mono text-sm text-[#005a07] font-bold tracking-wider min-h-[42px] flex items-center">
+                          {generatedPassword || <span className="text-zinc-300 font-normal font-body">Click Generate to create a secure password</span>}
+                        </div>
+                        {generatedPassword && (
+                          <button type="button" onClick={() => { navigator.clipboard.writeText(generatedPassword); setCopiedPassword(true); }}
+                            className="text-xs font-bold text-[#005a07] border border-[#005a07]/30 px-3 py-2 rounded-xl hover:bg-[#005a07]/5 whitespace-nowrap">
+                            {copiedPassword ? '✓ Copied!' : 'Copy'}
+                          </button>
+                        )}
+                        <button type="button" onClick={generateTempPassword}
+                          className="flex items-center gap-1.5 bg-[#005a07] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:opacity-90 whitespace-nowrap">
+                          <span className="material-symbols-outlined text-sm">refresh</span>
+                          {generatedPassword ? 'Regenerate' : 'Generate'}
+                        </button>
+                      </div>
+                      <p className="text-[11px] text-[#707a6b] mt-2">
+                        Share this with the staff member — they must change it on first login.
+                      </p>
+                    </div>
+
+                    {staffCreateError && (
+                      <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700 flex items-center gap-2">
+                        <span className="material-symbols-outlined text-sm">error</span>
+                        {staffCreateError}
+                      </div>
+                    )}
+
+                    <div className="flex gap-3">
+                      <button onClick={addNewStaff} disabled={staffCreateStatus === 'creating'}
+                        className="bg-gradient-to-br from-[#005a07] to-[#1d741b] text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-60 flex items-center gap-2">
+                        {staffCreateStatus === 'creating'
+                          ? <><div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />Creating…</>
+                          : <><span className="material-symbols-outlined text-sm">person_add</span>Create Account</>
+                        }
+                      </button>
+                      <button onClick={resetNewStaffForm}
+                        className="px-6 py-2.5 border border-[#e4e2e2] rounded-xl font-bold text-sm text-[#40493c] hover:bg-[#f5f3f3]">Cancel</button>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 

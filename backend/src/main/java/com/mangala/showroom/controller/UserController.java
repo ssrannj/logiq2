@@ -3,6 +3,7 @@ package com.mangala.showroom.controller;
 import com.mangala.showroom.model.Order;
 import com.mangala.showroom.model.OrderStatus;
 import com.mangala.showroom.model.Product;
+import com.mangala.showroom.model.Role;
 import com.mangala.showroom.model.User;
 import com.mangala.showroom.payload.UserProfileResponse;
 import com.mangala.showroom.payload.WarrantyItem;
@@ -15,10 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -38,6 +41,9 @@ public class UserController {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     private UserDetailsImpl currentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -114,22 +120,68 @@ public class UserController {
     @GetMapping("/admin/all")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<java.util.Map<String, Object>>> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        List<java.util.Map<String, Object>> result = new ArrayList<>();
-        for (User u : users) {
-            java.util.Map<String, Object> m = new LinkedHashMap<>();
-            m.put("id", u.getId());
-            m.put("name", u.getName());
-            m.put("email", u.getEmail());
-            m.put("fullName", u.getFullName() != null ? u.getFullName() : u.getName());
-            m.put("phoneNumber", u.getPhoneNumber() != null ? u.getPhoneNumber() : "—");
-            m.put("address", u.getAddress() != null ? u.getAddress() : "—");
-            m.put("role", u.getRole().toString());
-            m.put("points", u.getPoints());
-            long orderCount = orderRepository.findByUserIdAndStatus(u.getId(), OrderStatus.DELIVERED).size();
-            m.put("totalOrders", orderCount);
-            result.add(m);
+        try {
+            List<User> users = userRepository.findAll();
+            List<java.util.Map<String, Object>> result = new ArrayList<>();
+            for (User u : users) {
+                java.util.Map<String, Object> m = new LinkedHashMap<>();
+                m.put("id", u.getId() != null ? u.getId() : 0L);
+                m.put("name", u.getName() != null ? u.getName() : "");
+                m.put("email", u.getEmail() != null ? u.getEmail() : "");
+                m.put("fullName", u.getFullName() != null ? u.getFullName() : (u.getName() != null ? u.getName() : ""));
+                m.put("phoneNumber", u.getPhoneNumber() != null ? u.getPhoneNumber() : "—");
+                m.put("address", u.getAddress() != null ? u.getAddress() : "—");
+                m.put("role", u.getRole() != null ? u.getRole().toString() : "CUSTOMER");
+                m.put("points", u.getPoints() != null ? u.getPoints() : 0);
+                m.put("totalOrders", orderRepository.findByUserId(u.getId() != null ? u.getId() : 0L).size());
+                m.put("forcePasswordChange", u.isForcePasswordChange());
+                result.add(m);
+            }
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body(null);
         }
-        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/admin/create-staff")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createStaffAccount(@RequestBody Map<String, String> body) {
+        String email    = body.get("email");
+        String name     = body.get("name");
+        String password = body.get("password");
+
+        if (email == null || name == null || password == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "name, email, and password are required"));
+        }
+        if (userRepository.existsByEmail(email)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Email is already in use"));
+        }
+
+        User staff = new User(name, email, encoder.encode(password), Role.ADMIN);
+        staff.setFullName(name);
+        staff.setForcePasswordChange(true);
+        staff.setPoints(0);
+        userRepository.save(staff);
+
+        return ResponseEntity.ok(Map.of("message", "Staff account created successfully", "email", email));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody Map<String, String> body) {
+        UserDetailsImpl userDetails = currentUser();
+        User user = userRepository.findByEmail(userDetails.getEmail()).orElse(null);
+        if (user == null) return ResponseEntity.notFound().build();
+
+        String newPassword = body.get("newPassword");
+        if (newPassword == null || newPassword.length() < 6) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password must be at least 6 characters"));
+        }
+
+        user.setPassword(encoder.encode(newPassword));
+        user.setForcePasswordChange(false);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
     }
 }

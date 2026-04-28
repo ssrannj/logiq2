@@ -9,13 +9,15 @@ public class JwtResponse {
     private String name;
     private String email;
     private Role role;
+    private boolean forcePasswordChange;
 
-    public JwtResponse(String accessToken, Long id, String name, String email, Role role) {
+    public JwtResponse(String accessToken, Long id, String name, String email, Role role, boolean forcePasswordChange) {
         this.token = accessToken;
         this.id = id;
         this.name = name;
         this.email = email;
         this.role = role;
+        this.forcePasswordChange = forcePasswordChange;
     }
 
     public String getToken() { return token; }
@@ -30,4 +32,6 @@ public class JwtResponse {
     public void setEmail(String email) { this.email = email; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public boolean isForcePasswordChange() { return forcePasswordChange; }
+    public void setForcePasswordChange(boolean forcePasswordChange) { this.forcePasswordChange = forcePasswordChange; }
 }

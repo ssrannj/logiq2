@@ -55,6 +55,8 @@ export const updateOrderStatus = (id, status) =>
 export const getUserProfile = () => API.get('/api/user/profile');
 export const getWarranties = () => API.get('/api/user/warranties');
 export const getAllUsers = () => API.get('/api/user/admin/all');
+export const createStaffAccount = (data) => API.post('/api/user/admin/create-staff', data);
+export const changePassword = (newPassword) => API.post('/api/user/change-password', { newPassword });
 
 // ─── Guest Order Tracking ─────────────────────────────────────────────────────
 export const trackGuestOrder = (orderId, email) =>

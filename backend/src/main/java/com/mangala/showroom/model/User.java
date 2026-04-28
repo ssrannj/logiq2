@@ -29,6 +29,9 @@ public class User {
     private String phoneNumber;
     private String address;
 
+    @Column(nullable = false)
+    private boolean forcePasswordChange = false;
+
     public User() {}
 
     public User(String name, String email, String password, Role role) {
@@ -57,4 +60,6 @@ public class User {
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }
+    public boolean isForcePasswordChange() { return forcePasswordChange; }
+    public void setForcePasswordChange(boolean forcePasswordChange) { this.forcePasswordChange = forcePasswordChange; }
 }

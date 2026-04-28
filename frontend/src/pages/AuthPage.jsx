@@ -29,8 +29,14 @@ export default function AuthPage() {
     setError(null);
     setLoading(true);
     try {
-      await login(loginForm.email, loginForm.password);
-      navigate('/');
+      const data = await login(loginForm.email, loginForm.password);
+      if (data.forcePasswordChange) {
+        navigate('/change-password');
+      } else if (data.role === 'ADMIN') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid email or password. Please try again.');
     } finally {

@@ -11,6 +11,7 @@ import AuthPage from './pages/AuthPage';
 import AdminDashboard from './pages/AdminDashboard';
 import CustomerDashboard from './pages/CustomerDashboard';
 import LogiqBrain from './pages/LogiqBrain';
+import ChangePasswordPage from './pages/ChangePasswordPage';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
             
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<CustomerDashboard />} />
+              <Route path="/change-password" element={<ChangePasswordPage />} />
             </Route>
 
             <Route element={<ProtectedRoute roleRequired="ADMIN" />}>
